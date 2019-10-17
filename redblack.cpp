@@ -11,31 +11,45 @@ Node<T>::Node(T&& element)
     color = RED;
 }
 
-//template <typename T>
-//bool RedBlackTree<T>::add(T&& element)
-//{
-//    return add(element,root);
-//}
+template <typename T>
+bool RedBlackTree<T>::add(T&& element)
+{       if(root==nullptr)
+    {   root = new Node<T>(std::forward<T>(element));
+        root->color = BLACK;
+        return true;
+    }
+    return add(std::forward<T>(element),root);
+}
 
 template <typename T>
 bool RedBlackTree<T>::add(T&& element ,Node<T> * current)
 {
-    if(current==nullptr)
-    {current = new Node<T>(std::forward<T>(element));
-        if(root==current)
-            current->color = BLACK;
-        return true;
-    }
     if(current->element==element)
     {
         return true;
     }
 
     if(current->element > element)
-        add(std::forward<T>(element),current->left);
+    {   if(current->left==nullptr)
+        {
+            current->left = new Node<T>(std::forward<T>(element));
+            // Check and preform recoloring and rotation
+            return true;
+        }
+        else
+            return add(std::forward<T>(element),current->left);
+    }
     else
-        add(std::forward<T>(element),current->right);
+    {
+        if(current->right==nullptr)
+        {
+            current->right = new Node<T>(std::forward<T>(element));
+            // Check and preform recoloring and rotation
+            return true;
+        }
+        else
+            return add(std::forward<T>(element),current->right);
+    }
 
-    // Preform Recoloring and Rotation
 
 }

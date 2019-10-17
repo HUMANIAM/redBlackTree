@@ -21,8 +21,8 @@ class RedBlackTree
 
 public:
     // Add
-    //bool add(T&&);
-    bool add(T&& , Node<T>* = nullptr);
+    bool add(T&&);
+    bool add(T&& , Node<T>*);
     bool add(std::initializer_list<T> args);
     bool add(std::vector<T>);
     //variadic add
