@@ -4,8 +4,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-        main.cpp \
-        redblack.cpp
+        main.cpp
 
 HEADERS += \
     redblack.h

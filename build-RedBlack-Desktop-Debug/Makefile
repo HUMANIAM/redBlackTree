@@ -280,8 +280,7 @@ compiler_clean:
 
 ####### Compile
 
-main.o: ../main.cpp ../redblack.cpp \
-		../redblack.h
+main.o: ../main.cpp ../redblack.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../main.cpp
 
 ####### Install
