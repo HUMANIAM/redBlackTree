@@ -5,13 +5,20 @@ RedBlackTree<T>::RedBlackTree()
 {
     root=nullptr;
 }
-
+template<typename  T>
+Node<T>::Node()
+{
+    right = nullptr;
+    left = nullptr;
+    element = 0;
+    color = BLACK;
+}
 template<typename T>
 Node<T>::Node(T&& element)
 {
     this->element = element;
-    right = nullptr;
-    left = nullptr;
+    right = new Node();
+    left = new Node();
     parent = nullptr;
     color = RED;
 }
@@ -56,6 +63,7 @@ bool RedBlackTree<T>::add(T& element ,Node<T> * current)
     {   if(current->left==nullptr)
         {
             current->left = new Node<T>(std::forward<T>(element));
+            current->left->parent = current;
             // Check and preform recoloring and rotation
             check_tree(current->left);
             return true;
@@ -68,6 +76,7 @@ bool RedBlackTree<T>::add(T& element ,Node<T> * current)
         if(current->right==nullptr)
         {
             current->right = new Node<T>(std::forward<T>(element));
+            current->right->parent = current;
             // Check and preform recoloring and rotation
             check_tree(current->right);
             return true;
@@ -91,6 +100,7 @@ bool RedBlackTree<T>::add(T&& element ,Node<T> * current)
     {   if(current->left==nullptr)
         {
             current->left = new Node<T>(std::forward<T>(element));
+            current->left->parent = current;
             // Check and preform recoloring and rotation
             check_tree(current->left);
             return true;
@@ -103,6 +113,7 @@ bool RedBlackTree<T>::add(T&& element ,Node<T> * current)
         if(current->right==nullptr)
         {
             current->right = new Node<T>(std::forward<T>(element));
+            current->right->parent = current;
             // Check and preform recoloring and rotation
             check_tree(current->right);
             return true;
@@ -182,11 +193,10 @@ std::vector<bool> RedBlackTree<T>::search(const Container<T,Args...>& list)
 }
 template <class T>
 void RedBlackTree<T>::check_tree(Node<T> * current)
-{
-    current->colour = RED;
-    while ( (current != root) && (current->parent->colour == RED) ) {
+{   std::cout<<"check tree start"<<std::endl;
+    while ( (current != root) && (current->parent->color == RED) ) {
         if ( current->parent == current->parent->parent->left ) {
-            /* If current's parent is a left, y is current's right 'uncle' */
+            /* If current's parent is a left, temp is current's right 'uncle' */
             left(current);
         }
         else {
@@ -195,53 +205,58 @@ void RedBlackTree<T>::check_tree(Node<T> * current)
             right(current);
         }
     }
-    /* Colour the root black */
-    root->colour = BLACK;
+    /* color the root black */
+    root->color = BLACK;
+    std::cout<<"check tree end"<<std::endl;
 
 
 }
 template <class T>
 void RedBlackTree<T>::left(Node<T>*&current)
-{    Node<T> * temp;
-     temp = current->parent->parent->right;
-      if ( temp->colour == RED ) {
-          /* case 1 - change the colours */
-          current->parent->colour = BLACK;
-          temp->colour = BLACK;
-          current->parent->parent->colour = RED;
-          /* Move current up the tree */
-          current = current->parent->parent;
-      }
-      else {
-          /* y is a black node */
-          if ( current == current->parent->right ) {
-              /* and current is to the right */
-              /* case 2 - move current up and rotate */
-              current = current->parent;
-              left_rotate( current );
-          }
-          /* case 3 */
-          current->parent->colour = BLACK;
-          current->parent->parent->colour = RED;
-          right_rotate(current->parent->parent );
-      }
+{   std::cout<<"start left"<<std::endl;
+    Node<T> * temp;
+    temp = current->parent->parent->right;
+    if (temp->color == RED ) {
+        /* case 1 - change the colors */
+        current->parent->color = BLACK;
+        temp->color = BLACK;
+        current->parent->parent->color = RED;
+        /* Move current up the tree */
+        current = current->parent->parent;
+        return;
+    }
+    else {
+        /* temp is a black node */
+        if ( current == current->parent->right ) {
+            /* and current is to the right */
+            /* case 2 - move current up and rotate */
+            current = current->parent;
+            left_rotate( current );
+            return;
+        }
 
+        /* case 3 */
+        current->parent->color = BLACK;
+        current->parent->parent->color = RED;
+        right_rotate(current->parent->parent );
+    }
+    std::cout<<"end right"<<std::endl;
 }
 template <class T>
 void RedBlackTree<T>::right(Node<T>*&current)
-{
+{   std::cout<<"start right"<<std::endl;
     Node<T> *temp;
     temp = current->parent->parent->left;
-    if ( temp->colour == RED ) {
-        /* case 1 - change the colours */
-        current->parent->colour = BLACK;
-        temp->colour = BLACK;
-        current->parent->parent->colour = RED;
+    if ( temp->color == RED ) {
+        /* case 1 - change the colors */
+        current->parent->color = BLACK;
+        temp->color = BLACK;
+        current->parent->parent->color = RED;
         /* Move current up the tree */
         current = current->parent->parent;
     }
     else {
-        /* y is a black node */
+        /* temp is a black node */
         if ( current == current->parent->left ) {
             /* and current is to the left */
             /* case 2 - move current up and rotate */
@@ -249,8 +264,79 @@ void RedBlackTree<T>::right(Node<T>*&current)
             right_rotate( current );
         }
         /* case 3 */
-        current->parent->colour = BLACK;
-        current->parent->parent->colour = RED;
-        left_rotate(current->parent->parent );
+        current->parent->color = BLACK;
+        current->parent->parent->color = RED;
+        left_rotate(current->parent->parent);
     }
+    std::cout<<"end right"<<std::endl;
 }
+
+template <class T>
+void RedBlackTree<T>::print()
+{
+    print(root);
+}
+template <class T>
+void RedBlackTree<T>::print(Node<T>*current)
+{
+    if(current==nullptr)
+    { return;
+    }
+    print(current->left);
+    if(current->element!=0)
+    std::cout<<"element : "<<current->element<<std::endl;
+    print(current->right);
+
+}
+template <class T>
+void RedBlackTree<T>::left_rotate(Node<T> *current ) {
+    Node<T> *temp;
+    temp = current->right;
+    /* Turn temp's left sub-tree into x's right sub-tree */
+    current->right = temp->left;
+    if ( temp->left != nullptr )
+        temp->left->parent = current;
+    /* temp's new parent was x's parent */
+    temp->parent = current->parent;
+    /* Set the parent to point to temp instead of x */
+    /* First see whether we're at the root */
+    if ( current->parent == nullptr ) root = temp;
+    else
+        if ( current == (current->parent)->left )
+            /* x was on the left of its parent */
+            current->parent->left = temp;
+        else
+            /* x must have been on the right */
+            current->parent->right = temp;
+    /* Finalltemp, put x on temp's left */
+    temp->left = current;
+    current->parent = temp;
+    std::cout<<"left rotate"<<std::endl;
+}
+
+template <class T>
+void RedBlackTree<T>::right_rotate(Node<T> *current ) {
+    Node<T> *temp;
+    temp = current->right;
+    /* Turn temp's left sub-tree into x's right sub-tree */
+    current->right = temp->left;
+    if ( temp->left != nullptr )
+        temp->left->parent = current;
+    /* temp's new parent was x's parent */
+    temp->parent = current->parent;
+    /* Set the parent to point to temp instead of x */
+    /* First see whether we're at the root */
+    if ( current->parent == nullptr ) root = temp;
+    else
+        if ( current == (current->parent)->left )
+            /* x was on the left of its parent */
+            current->parent->left = temp;
+        else
+            /* x must have been on the right */
+            current->parent->right = temp;
+    /* Finalltemp, put x on temp's left */
+    temp->left = current;
+    current->parent = temp;
+    std::cout<<"right rotate"<<std::endl;
+}
+

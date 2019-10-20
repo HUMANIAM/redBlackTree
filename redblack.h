@@ -17,6 +17,7 @@ struct Node
     Color color;
     Node(T&&);
     Node(T&);
+    Node();
 };
 
 template <typename T>
@@ -41,6 +42,7 @@ private:
     void check_tree(Node<T>*);
     void rb_transplant(Node<T>*, Node<T>*);
     void rb_remove_fixup(Node<T*>);
+    void print(Node<T>*);
 
 public:
     RedBlackTree();
