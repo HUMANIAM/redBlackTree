@@ -6,6 +6,7 @@
 #include <iostream>
 #include <utility>
 
+
 enum Color{RED,BLACK};
 template <typename T>
 struct Node
@@ -17,7 +18,6 @@ struct Node
     Color color;
     Node(T&&);
     Node(T&);
-    Node();
 };
 
 template <typename T>

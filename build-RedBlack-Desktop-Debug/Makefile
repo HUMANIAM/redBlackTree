@@ -102,7 +102,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		../../RedBlack.pro redblack.h ../main.cpp
+		../../RedBlack.pro redblack.h \
+		redblack.inl ../main.cpp
 QMAKE_TARGET  = RedBlack
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = RedBlack
@@ -280,7 +281,8 @@ compiler_clean:
 
 ####### Compile
 
-main.o: ../main.cpp ../redblack.h
+main.o: ../main.cpp ../redblack.h \
+		../redblack.inl
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../main.cpp
 
 ####### Install
