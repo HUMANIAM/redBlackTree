@@ -14,8 +14,8 @@ CC            = gcc
 CXX           = g++
 DEFINES       = -DQT_QML_DEBUG
 CFLAGS        = -m64 -pipe -g -Wall -W -fPIC $(DEFINES)
-CXXFLAGS      = -m64 -pipe -g -std=c++0x -Wall -W -fPIC $(DEFINES)
-INCPATH       = -I../../redblacktree -I. -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64
+CXXFLAGS      = -m64 -pipe -std=c++17 -fopenmp -g -Wall -W -fPIC $(DEFINES)
+INCPATH       = -I../../redblacktree -I. -I/opt/rdi/include -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64
 QMAKE         = /usr/lib/x86_64-linux-gnu/qt5/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -48,8 +48,8 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../main.cpp 
-OBJECTS       = main.o
+SOURCES       = ../tests/tests.cpp 
+OBJECTS       = tests.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -95,7 +95,6 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resolve_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_post.prf \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/c++11.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qml_debug.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/warn_on.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/testcase_targets.prf \
@@ -103,7 +102,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		../../RedBlack.pro redblack.h \
-		redblack.inl ../main.cpp
+		redblack.inl ../tests/tests.cpp
 QMAKE_TARGET  = RedBlack
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = RedBlack
@@ -179,7 +178,6 @@ Makefile: ../RedBlack.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qma
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resolve_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_post.prf \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/c++11.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qml_debug.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/warn_on.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/testcase_targets.prf \
@@ -233,7 +231,6 @@ Makefile: ../RedBlack.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qma
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resolve_config.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_post.prf:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/c++11.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qml_debug.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/warn_on.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/testcase_targets.prf:
@@ -281,9 +278,10 @@ compiler_clean:
 
 ####### Compile
 
-main.o: ../main.cpp ../redblack.h \
-		../redblack.inl
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../main.cpp
+tests.o: ../tests/tests.cpp ../redblack.h \
+		../redblack.inl \
+		/opt/rdi/include/catch.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o tests.o ../tests/tests.cpp
 
 ####### Install
 

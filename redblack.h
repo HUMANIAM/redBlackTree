@@ -43,6 +43,7 @@ private:
     void rb_transplant(Node<T>*, Node<T>*);
     void rb_remove_fixup(Node<T*>);
     void print(Node<T>*);
+    void get_elements(Node<T>*,std::vector<T>&);
 
 public:
     RedBlackTree();
@@ -52,6 +53,7 @@ public:
 
     bool add(T&&);
     bool add(T&);
+    bool check_element_order(std::vector<T>);
 
     // Remove
     bool remove(T&&);

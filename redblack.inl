@@ -49,7 +49,7 @@ bool RedBlackTree<T>::add(T& element ,Node<T> * current)
 {
     if(current->element==element)
     {
-        return true;
+        return false;
     }
 
     else if(current->element > element)
@@ -86,7 +86,7 @@ bool RedBlackTree<T>::add(T&& element ,Node<T> * current)
 {
     if(current->element==element)
     {
-        return true;
+        return false;
     }
 
     else if(current->element > element)
@@ -126,7 +126,6 @@ std::vector<bool> RedBlackTree<T>::add(const Container<T,Args...>& list)
     for(T element : list)
     {
         search_results.push_back(add(std::move(element)));
-        print();
     }
     return search_results;
 }
@@ -241,7 +240,6 @@ void RedBlackTree<T>::right(Node<T>*current)
 
     if (temp!=nullptr && temp->color == RED ) {
         /* case 1 - change the colors */
-        std::cout<<"case 1"<<std::endl;
         current->parent->color = BLACK;
         temp->color = BLACK;
         current->parent->parent->color = RED;
@@ -276,8 +274,8 @@ void RedBlackTree<T>::print(Node<T>*current)
     { return;
     }
     print(current->left);
-   std::string color = current->color==0?"RED":"Black";
-   std::cout<<"element : "<<current->element<<"  color: "<<color<<std::endl;
+    std::string color = current->color==0?"RED":"Black";
+    std::cout<<"element : "<<current->element<<"  color: "<<color<<std::endl;
     print(current->right);
 
 }
@@ -328,7 +326,31 @@ void RedBlackTree<T>::right_rotate(Node<T> *current ) {
             current->parent->left = temp;
     /* Finally, put x on temp's right */
     temp->right = current;
-   current->parent = temp;
-    std::cout<<"right rotate"<<std::endl;
-}
+    current->parent = temp;
 
+}
+template <class T>
+bool RedBlackTree<T>::check_element_order(std::vector<T> v)
+{
+    std::vector<T> elements;
+    get_elements(root,elements);
+    if(v.size()!=elements.size())
+        return false;
+
+    for(unsigned int i = 0;i<v.size();i++)
+    {
+        if(v[i]!=elements[i])
+            return false;
+    }
+    return true;
+}
+template <class T>
+void RedBlackTree<T>::get_elements(Node<T> *ptr,std::vector<T>& v)
+{
+    if(ptr == nullptr)
+        return;
+    get_elements(ptr->left,v);
+    v.push_back(ptr->element);
+    get_elements(ptr->right,v);
+
+}
