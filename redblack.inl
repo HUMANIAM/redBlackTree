@@ -159,21 +159,6 @@ bool RedBlackTree<T>::search(T&& element,Node<T>* current)
         return search(std::move(element),current->right);
 }
 
-template <typename T>
-bool RedBlackTree<T>::search(T& element,Node<T>* current)
-{
-    if(current==nullptr)
-        return false;
-
-    if(current->element==element)
-        return true;
-
-    else if(current->element>element)
-        return search(std::move(element),current->left);
-
-    else
-        return search(std::move(element),current->right);
-}
 
 template <class T>
 template < template < class ... > class Container, class ... Args >
@@ -185,6 +170,8 @@ std::vector<bool> RedBlackTree<T>::search(const Container<T,Args...>& list)
     }
     return search_results;
 }
+
+
 template <class T>
 void RedBlackTree<T>::check_tree(Node<T> * current)
 {
@@ -203,6 +190,8 @@ void RedBlackTree<T>::check_tree(Node<T> * current)
     root->color = BLACK;
 
 }
+
+
 template <class T>
 void RedBlackTree<T>::left(Node<T>*current)
 {
@@ -233,6 +222,8 @@ void RedBlackTree<T>::left(Node<T>*current)
     }
 
 }
+
+
 template <class T>
 void RedBlackTree<T>::right(Node<T>*current)
 {
@@ -263,12 +254,14 @@ void RedBlackTree<T>::right(Node<T>*current)
     }
 }
 
+
 template <class T>
 void RedBlackTree<T>::print()
 {
     print(root);
     std::cout<<std::endl<<std::endl;
 }
+
 template <class T>
 void RedBlackTree<T>::print(Node<T>*current)
 {
@@ -281,6 +274,7 @@ void RedBlackTree<T>::print(Node<T>*current)
     print(current->right);
 
 }
+
 template <class T>
 void RedBlackTree<T>::left_rotate(Node<T> *current ) {
     Node<T> *temp;
@@ -332,3 +326,4 @@ void RedBlackTree<T>::right_rotate(Node<T> *current ) {
     std::cout<<"right rotate"<<std::endl;
 }
 
+/////////////////////////////////////////////// Remove node ///////////////////

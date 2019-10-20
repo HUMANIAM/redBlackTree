@@ -25,15 +25,16 @@ class RedBlackTree
 {
 
 private:
+    Node<T> *root;
     bool add(T&& , Node<T>*);
     bool add(T& , Node<T>*);
     bool remove(T&&, Node<T>*);
     bool remove(T&, Node<T>*);
     bool search(T&&,Node<T>*);
-    bool search(T&,Node<T>*);
+    bool search(T&,Node<T>*);     // unnecessery
     void right(Node<T>*);
     void left(Node<T>*);
-    Node<T> *root;
+    Node<T>* search_node(T&&, Node<T>*);
 
     // Utility functions
     void left_rotate(Node<T>*);
