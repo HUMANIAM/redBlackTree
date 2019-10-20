@@ -31,8 +31,8 @@ private:
     bool remove(T&, Node<T>*);
     bool search(T&&,Node<T>*);
     bool search(T&,Node<T>*);
-    void right(Node<T>*&);
-    void left(Node<T>*&);
+    void right(Node<T>*);
+    void left(Node<T>*);
     Node<T> *root;
 
     // Utility functions

@@ -204,7 +204,7 @@ void RedBlackTree<T>::check_tree(Node<T> * current)
 
 }
 template <class T>
-void RedBlackTree<T>::left(Node<T>*&current)
+void RedBlackTree<T>::left(Node<T>*current)
 {
     Node<T> * temp;
     temp = current->parent->parent->right;
@@ -234,7 +234,7 @@ void RedBlackTree<T>::left(Node<T>*&current)
 
 }
 template <class T>
-void RedBlackTree<T>::right(Node<T>*&current)
+void RedBlackTree<T>::right(Node<T>*current)
 {
     Node<T> *temp;
     temp = current->parent->parent->left;
@@ -248,7 +248,7 @@ void RedBlackTree<T>::right(Node<T>*&current)
         /* Move current up the tree */
         current = current->parent->parent;
     }
-    else { std::cout<<"case 2"<<std::endl;
+    else {
         /* temp is a black node */
         if ( current == current->parent->left ) {
             /* and current is to the left */
@@ -257,7 +257,6 @@ void RedBlackTree<T>::right(Node<T>*&current)
             right_rotate( current );
         }
         /* case 3 */
-        std::cout<<"case 3"<<std::endl;
         current->parent->color = BLACK;
         current->parent->parent->color = RED;
         left_rotate(current->parent->parent);
@@ -305,7 +304,6 @@ void RedBlackTree<T>::left_rotate(Node<T> *current ) {
     /* Finalltemp, put x on temp's left */
     temp->left = current;
     current->parent = temp;
-    std::cout<<"left rotate"<<std::endl;
 }
 
 template <class T>
@@ -324,13 +322,13 @@ void RedBlackTree<T>::right_rotate(Node<T> *current ) {
     else
         if ( current == current->parent->right )
             /* x was on the right of its parent */
-            current->parent->left = temp;
+            current->parent->right = temp;
         else
             /* x must have been on the right */
             current->parent->left = temp;
     /* Finally, put x on temp's right */
     temp->right = current;
-    current->parent = temp;
+   current->parent = temp;
     std::cout<<"right rotate"<<std::endl;
 }
 
