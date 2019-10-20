@@ -7,4 +7,5 @@ SOURCES += \
         main.cpp
 
 HEADERS += \
-    redblack.h
+    redblack.h \
+    redblack.inl
