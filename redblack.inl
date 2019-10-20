@@ -1,5 +1,13 @@
 #include "redblack.h"
 #include <string.h>
+
+///////////////////////
+template <typename T>
+void f(T xx, T* x){
+    std::cout << "template function" << std::endl;
+}
+
+//////////////////////////
 template<typename T>
 RedBlackTree<T>::RedBlackTree()
 {
@@ -35,6 +43,7 @@ bool RedBlackTree<T>::add(T&& element)
     }
     return add(std::forward<T>(element),root);
 }
+
 template <typename T>
 bool RedBlackTree<T>::add(T& element)
 {   if(root==nullptr)
@@ -44,6 +53,8 @@ bool RedBlackTree<T>::add(T& element)
     }
     return add(std::forward<T>(element),root);
 }
+
+
 template <typename T>
 bool RedBlackTree<T>::add(T& element ,Node<T> * current)
 {
@@ -134,31 +145,46 @@ std::vector<bool> RedBlackTree<T>::add(const Container<T,Args...>& list)
 template <typename T>
 bool RedBlackTree<T>::search(T&& element)
 {
-    return search(std::move(element),root);
+    if(search_util(std::move(element),root) != nullptr)
+    {
+        return  true;
+    }else{
+        return false;
+    }
 }
 
 template <typename T>
 bool RedBlackTree<T>::search(T& element)
 {
-    return search(std::move(element),root);
-}
-
-template <typename T>
-bool RedBlackTree<T>::search(T&& element,Node<T>* current)
-{
-    if(current==nullptr)
+    if(search_util(std::move(element),root) != nullptr)
+    {
+        return  true;
+    }else{
         return false;
-
-    if(current->element==element)
-        return true;
-
-    else if(current->element>element)
-        return search(std::move(element),current->left);
-
-    else
-        return search(std::move(element),current->right);
+    }
 }
 
+
+// search for element in rbTree and if found return pointer to it else return null pointer
+template<typename T>
+Node<T>* RedBlackTree<T>::search_util(T&& element, Node<T>* current){
+    if(current==nullptr){
+        return nullptr;
+    }
+
+    if(current->element == element)
+    {
+        return current;
+
+    }else if(current->element > element)
+    {
+        return search_util(std::move(element),current->left);
+
+    }else{
+        return search_util(std::move(element),current->right);
+    }
+
+}
 
 template <class T>
 template < template < class ... > class Container, class ... Args >

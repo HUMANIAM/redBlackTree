@@ -5,8 +5,16 @@
 #include <memory>
 #include <iostream>
 #include <utility>
+/////////////////////////////
+template <typename T>
+void f(T xx, T* x = nullptr);
 
+template <typename T>
+void ff(const T&){
+    std::cout << "hello" << std::endl;
+}
 
+/////////////////////////////
 enum Color{RED,BLACK};
 template <typename T>
 struct Node
@@ -30,11 +38,11 @@ private:
     bool add(T& , Node<T>*);
     bool remove(T&&, Node<T>*);
     bool remove(T&, Node<T>*);
-    bool search(T&&,Node<T>*);
-    bool search(T&,Node<T>*);     // unnecessery
+    //bool search(T&&,Node<T>*);    // unnecessary
+    //bool se, Node<T>* = nullptrarch(T&,Node<T>*);     // unnecessery
     void right(Node<T>*);
     void left(Node<T>*);
-    Node<T>* search_node(T&&, Node<T>*);
+    Node<T>* search_util(T&&, Node<T>* = nullptr);
 
     // Utility functions
     void left_rotate(Node<T>*);
