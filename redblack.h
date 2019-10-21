@@ -33,22 +33,21 @@ class RedBlackTree
 {
 
 private:
-    Node<T> *root;
+    static Node<T> *root;
     bool add(T&& , Node<T>*);
     bool add(T& , Node<T>*);
-    bool remove(T&&, Node<T>*);
-    bool remove(T&, Node<T>*);
     //bool search(T&&,Node<T>*);    // unnecessary
     //bool se, Node<T>* = nullptrarch(T&,Node<T>*);     // unnecessery
     void right(Node<T>*);
     void left(Node<T>*);
-    Node<T>* search_util(T&&, Node<T>* = nullptr);
+    Node<T>* search_util(T&&, Node<T>* = root);
 
     // Utility functions
     void left_rotate(Node<T>*);
     void right_rotate(Node<T>*);
     void min_node(Node<T>*);
     void check_tree(Node<T>*);
+
     void rb_transplant(Node<T>*, Node<T>*);
     void rb_remove_fixup(Node<T*>);
     void print(Node<T>*);
@@ -63,8 +62,8 @@ public:
     bool add(T&);
 
     // Remove
-    bool remove(T&&);
-    bool remove(T&);
+    void remove(T&&);
+    void remove(T&);
 
     template < template < class ... > class Container, class ... Args >
     std::vector<bool> remove(Container<T,Args ...>);

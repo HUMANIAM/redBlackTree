@@ -2,12 +2,12 @@
 #include <string.h>
 
 ///////////////////////
-template <typename T>
-void f(T xx, T* x){
-    std::cout << "template function" << std::endl;
-}
-
 //////////////////////////
+
+// initialize init functions
+template <typename T>
+Node<T>* RedBlackTree<T>::root = nullptr;
+
 template<typename T>
 RedBlackTree<T>::RedBlackTree()
 {
@@ -145,7 +145,7 @@ std::vector<bool> RedBlackTree<T>::add(const Container<T,Args...>& list)
 template <typename T>
 bool RedBlackTree<T>::search(T&& element)
 {
-    if(search_util(std::move(element),root) != nullptr)
+    if(search_util(std::move(element)) != nullptr)
     {
         return  true;
     }else{
@@ -156,7 +156,7 @@ bool RedBlackTree<T>::search(T&& element)
 template <typename T>
 bool RedBlackTree<T>::search(T& element)
 {
-    if(search_util(std::move(element),root) != nullptr)
+    if(search_util(std::move(element)) != nullptr)
     {
         return  true;
     }else{
@@ -353,3 +353,42 @@ void RedBlackTree<T>::right_rotate(Node<T> *current ) {
 }
 
 /////////////////////////////////////////////// Remove node ///////////////////
+
+template <typename T>
+void RedBlackTree<T>::remove(T&& element){
+    Node<T>* node_addr = search_util(std::move(element));
+
+    // the node doesn't exist in the rbTree
+    if(node_addr == nullptr){
+        return;
+    }
+
+
+}
+
+template <typename T>
+void RedBlackTree<T>::remove(T&){
+
+}
+
+// delete u and replace it with v
+template <typename T>
+void RedBlackTree<T>::rb_transplant(Node<T>* u, Node<T>* v){
+    if(u == root)
+    {
+        root = v;
+    }else if (u = u->parent->left)
+    {
+        u->parent->left = v;
+    }else
+    {
+        u->parent->right = v;
+    }
+
+    v->parent = u->parent;
+}
+
+template <typename T>
+void RedBlackTree<T>::rb_remove_fixup(Node<T*>){
+
+}

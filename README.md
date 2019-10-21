@@ -9,7 +9,21 @@
 
 ## Notes
 - The longest path (root to farthest NIL) is no more than twice the length of the shortest path (root to the nearest NIL)
-- 
+	- Shortest path: all black nodes
+	- Longest path: alternative red-black 
+
+## Operations
+- Search   
+- Deletion (require rotation)
+- Insertion (require rotation)
+
+## Time Complexity
+- Search   O(log(n))
+- Deletion O(log(n))
+- Remove   O(log(n))
+
+## Memory Complexity
+- O(n)
 
 ## Applications 
 - Java: java.util.TreeMap , java.util.TreeSet .
