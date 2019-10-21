@@ -28,6 +28,7 @@ test:
     - ./RedBlack
 
 deploy:
+  stage: deploy
   script:
     - scp RedBlack ftp://ninja@turtle.rdi/home/ninja/cpp_team
 
