@@ -9,10 +9,10 @@ int main()
 //    f(10, new int);
 //    f(10);
     RedBlackTree<int>rdb;
-    std::vector<int> t = {10, 20, 30, 40, 35, 34};
+    std::vector<int> t = {10, 20, 30, 40, 35, 34, 100, 90, 80, 70, 60, 50};
 
     vector<bool> xxx= rdb.add(t);
-    rdb.remove(34);
+    rdb.remove(40);
     rdb.print();
 
     //cout << rdb.search(x) << endl;

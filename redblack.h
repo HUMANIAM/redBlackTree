@@ -50,7 +50,11 @@ private:
 
     void rb_transplant(Node<T>*, Node<T>*);
     void rb_remove_fixup(Node<T>*);
+    void rb_remove_fixup_left(Node<T>*);
+    void rb_remove_fixup_right(Node<T>*);
     void remove_util(Node<T>*);
+    void remove_fixup_case1(Node<T>*, Node<T>*);
+    Node<T>* remove_fixup_case2(Node<T>*, Node<T>*);
     void print(Node<T>*);
 
 public:

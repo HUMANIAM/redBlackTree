@@ -474,3 +474,47 @@ template <typename T>
 Node<T>* RedBlackTree<T>::min_node(Node<T>* node){
     return (node->left == nullptr)? node : min_node(node->left);
 }
+
+
+/* Fix remove **/
+template <class T>
+void RedBlackTree<T>::remove_fixup_case1(Node<T>* sibling_w, Node<T>* node_x){
+    sibling_w->color = BLACK;
+    node_x->parent->color = RED;
+    left_rotate(node_x->parent);
+    sibling_w = node_x->parent->right;
+
+}
+
+
+template <class T>
+Node<T>* RedBlackTree<T>::remove_fixup_case2(Node<T>* sibling_w, Node<T>* node_x){
+    sibling_w->color = RED;
+    return  node_x->parent;
+}
+
+
+template <typename T>
+void RedBlackTree<T>::rb_remove_fixup_left(Node<T>* node_x){
+    Node<T>* sibling_w = node_x->parent->right;
+
+    // case 1
+    if(sibling_w != nullptr && sibling_w->color == RED){
+        remove_fixup_case1(sibling_w, node_x);
+    }
+
+    // case 2
+    bool w_left_black  = (sibling_w->left == nullptr) || (sibling_w->left->color == BLACK);
+    bool w_right_black = (sibling_w->right == nullptr) || (sibling_w->right->color == BLACK);
+    if(w_left_black && w_right_black){
+        node_x = remove_fixup_case2(sibling_w, node_x);
+    }
+
+
+
+}
+
+template <typename T>
+void RedBlackTree<T>::rb_remove_fixup_right(Node<T>* node_x){
+
+}
