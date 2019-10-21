@@ -56,15 +56,7 @@ TEST_CASE("add function tests")
 
 
     }
-    SECTION("correct rotation")
-    {
-        std::vector<int> v = {1,4,3,2};
-        RedBlackTree<int> rdb;
-        rdb.add(v);
-        std::vector<int> vb = {1,2,3,4};
-        CHECK(rdb.check_element_order(vb));
 
-    }
 }
 
 TEST_CASE("search functions tests")
@@ -99,4 +91,16 @@ TEST_CASE("search functions tests")
         CHECK(rdb.search(v1)==vb);
     }
 
+}
+TEST_CASE("rotations")
+{
+    SECTION("correct rotation")
+    {
+        std::vector<int> v = {1,4,3,2};
+        RedBlackTree<int> rdb;
+        rdb.add(v);
+        std::vector<int> vb = {1,2,3,4};
+        CHECK(rdb.check_element_order(vb));
+
+    }
 }
