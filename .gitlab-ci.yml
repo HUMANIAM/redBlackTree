@@ -1,4 +1,4 @@
-image : "arwash.rdi:5000/common:basics"
+image : "rdieg/basics:latest"
 
 build:
   stage: build
