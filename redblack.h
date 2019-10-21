@@ -49,7 +49,8 @@ private:
     void check_tree(Node<T>*);
 
     void rb_transplant(Node<T>*, Node<T>*);
-    void rb_remove_fixup(Node<T*>);
+    void rb_remove_fixup(Node<T>*);
+    void remove_util(Node<T>*);
     void print(Node<T>*);
 
 public:

@@ -345,14 +345,61 @@ void RedBlackTree<T>::right_rotate(Node<T> *current ) {
 
 /////////////////////////////////////////////// Remove node ///////////////////
 
+template<typename T>
+void RedBlackTree<T>::remove_util(Node<T>* node_d){
+    // temp will replace the node_d and temp_right will replace temp node
+    Node<T>* temp = node_d;
+    Color temp_color = temp->color;
+    Node<T>* temp_right = nullptr;
+
+    if(node_d->left == nullptr)
+    {
+        temp_right = node_d->right;
+        rb_transplant(node_d, node_d->right);
+
+    }else if(node_d->right == nullptr)
+    {
+        temp_right = node_d->left;
+        rb_transplant(node_d, node_d->left);
+    }else
+    {
+        // find the minimum node in the lhs of the node_d
+        temp = min_node(node_d->right);
+        temp_color = temp->color;
+        temp_right = temp->right;
+
+
+        if(temp_right != nullptr && temp->parent == node_d){
+            temp_right->parent = temp;
+        }else
+        {
+            rb_transplant(temp, temp_right);
+            temp->right = node_d->right;
+
+            if(temp->right != nullptr){
+                temp->right->parent = temp;
+            }
+        }
+
+        rb_transplant(node_d, temp);
+        temp->left = node_d->left;
+        temp->left->parent = temp;
+        temp->color = node_d->color;
+    }
+
+    // delete node_d
+    delete node_d;
+
+    //if temp color was black that might result in breaking some propeties of rbTree after moving it.
+    if(temp_color == BLACK)
+    {
+        rb_remove_fixup(temp_right);
+    }
+}
+
+
 template <typename T>
 void RedBlackTree<T>::remove(T&& element){
-    Node<T>* node_addr = search_util(std::move(element));
-
-    // the node doesn't exist in the rbTree
-    if(node_addr == nullptr){
-        return;
-    }
 
 
 }
@@ -380,6 +427,6 @@ void RedBlackTree<T>::rb_transplant(Node<T>* u, Node<T>* v){
 }
 
 template <typename T>
-void RedBlackTree<T>::rb_remove_fixup(Node<T*>){
+void RedBlackTree<T>::rb_remove_fixup(Node<T>* node){
 
 }
