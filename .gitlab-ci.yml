@@ -3,6 +3,10 @@ image : "rdieg/basics:latest"
 stages:
   - build
   - test
+  - deploy
+
+
+
 
 build:
   stage: build
@@ -22,3 +26,8 @@ test:
 
   script:
     - ./RedBlack
+
+deploy:
+  script:
+    - scp RedBlack ftp://ninja@turtle.rdi/home/ninja/cpp_team
+
