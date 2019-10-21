@@ -28,5 +28,5 @@ deploy:
   tags:
     - shell
   script:
-    - scp RedBlack ninja@turtle.rdi:/home/ninja/cpp_team
+    - scp RedBlack ninja@turtle.rdi:/home/ninja/cpp_team/RedBlackTree
 
