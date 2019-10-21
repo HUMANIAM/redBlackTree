@@ -26,7 +26,7 @@ test:
 deploy:
   stage: deploy
   tags:
-    - docker
+    - shell
   script:
-    - scp -p 22 RedBlack ninja@turtle.rdi:/home/ninja/cpp_team
+    - scp RedBlack ninja@turtle.rdi:/home/ninja/cpp_team
 
