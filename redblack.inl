@@ -400,13 +400,21 @@ void RedBlackTree<T>::remove_util(Node<T>* node_d){
 
 template <typename T>
 void RedBlackTree<T>::remove(T&& element){
+    Node<T>* node_addr = search_util(std::move(element));
 
+    // the node doesn't exist in the rbTree
+    if(node_addr == nullptr){
+        return;
+    }
 
+    // remove the node
+    remove_util(node_addr);
 }
 
 template <typename T>
-void RedBlackTree<T>::remove(T&){
-
+void RedBlackTree<T>::remove(T& element){
+    T t = element;
+    remove(std::move(t));
 }
 
 // delete u and replace it with v
