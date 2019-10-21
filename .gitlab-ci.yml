@@ -2,6 +2,8 @@ image : "rdieg/basics:latest"
 
 build:
   stage: build
+  tags:
+    - docker
   script: g++ /tests/tests.cpp -o mybinary
   artifacts:
     paths:
@@ -9,6 +11,9 @@ build:
 
 test:
   stage: test
+  tags:
+    - docker
+
   script:
     - ./mybinary
 
