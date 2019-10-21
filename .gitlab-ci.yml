@@ -1,0 +1,14 @@
+image: gcc-7-14
+
+build:
+  stage: build
+  script: g++ /tests/tests.cpp -o mybinary
+  artifacts:
+    paths:
+      - mybinary
+
+test:
+  stage: test
+  script:
+    - ./mybinary
+
