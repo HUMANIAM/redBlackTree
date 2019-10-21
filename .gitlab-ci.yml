@@ -5,9 +5,6 @@ stages:
   - test
   - deploy
 
-
-
-
 build:
   stage: build
   tags:
@@ -23,12 +20,13 @@ test:
   stage: test
   tags:
     - docker
-
   script:
     - ./RedBlack
 
 deploy:
   stage: deploy
+  tags:
+    - docker
   script:
     - scp RedBlack ftp://ninja@turtle.rdi/home/ninja/cpp_team
 
