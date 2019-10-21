@@ -69,7 +69,7 @@ bool RedBlackTree<T>::add(T& element ,Node<T> * current)
             current->left = new Node<T>(std::forward<T>(element));
             current->left->parent = current;
             // Check and preform recoloring and rotation
-            check_tree(current->left);
+            add_fixup(current->left);
             return true;
         }
         else
@@ -82,7 +82,7 @@ bool RedBlackTree<T>::add(T& element ,Node<T> * current)
             current->right = new Node<T>(std::forward<T>(element));
             current->right->parent = current;
             // Check and preform recoloring and rotation
-            check_tree(current->right);
+            add_fixup(current->right);
             return true;
         }
         else
@@ -106,7 +106,7 @@ bool RedBlackTree<T>::add(T&& element ,Node<T> * current)
             current->left = new Node<T>(std::forward<T>(element));
             current->left->parent = current;
             // Check and preform recoloring and rotation
-            check_tree(current->left);
+            add_fixup(current->left);
             return true;
         }
         else
@@ -119,7 +119,7 @@ bool RedBlackTree<T>::add(T&& element ,Node<T> * current)
             current->right = new Node<T>(std::forward<T>(element));
             current->right->parent = current;
             // Check and preform recoloring and rotation
-            check_tree(current->right);
+            add_fixup(current->right);
             return true;
         }
         else
@@ -190,7 +190,7 @@ std::vector<bool> RedBlackTree<T>::search(const Container<T,Args...>& list)
 
 
 template <class T>
-void RedBlackTree<T>::check_tree(Node<T> * current)
+void RedBlackTree<T>::add_fixup(Node<T> * current)
 {
     while ( (current != root) && (current->parent->color == RED) ) {
         if ( current->parent == current->parent->parent->left ) {
@@ -215,7 +215,7 @@ void RedBlackTree<T>::left(Node<T>*current)
     Node<T> * temp;
     temp = current->parent->parent->right;
 
-    if (temp!=nullptr&&temp->color == RED ) {
+    if (temp!=nullptr && temp->color == RED ) {
         /* case 1 - change the colors */
         current->parent->color = BLACK;
         temp->color = BLACK;
@@ -344,38 +344,45 @@ void RedBlackTree<T>::right_rotate(Node<T> *current ) {
 }
 
 /////////////////////////////////////////////// Remove node ///////////////////
-
+using namespace std;
 template<typename T>
 void RedBlackTree<T>::remove_util(Node<T>* node_d){
-    // temp will replace the node_d and temp_right will replace temp node
+    // temp will replace the node_d and temp_x will replace temp node
+    //cout << "delete : " << node_d->element << " with parent " << node_d->parent->element << endl;
     Node<T>* temp = node_d;
+    Node<T>* temp_x = nullptr;
+
+    // for x is nullptr
+    Node<T>* temp_parent = node_d->parent;
     Color temp_color = temp->color;
-    Node<T>* temp_right = nullptr;
 
     if(node_d->left == nullptr)
     {
-        temp_right = node_d->right;
+        temp_x = node_d->right;
         rb_transplant(node_d, node_d->right);
 
     }else if(node_d->right == nullptr)
     {
-        temp_right = node_d->left;
+        temp_x = node_d->left;
         rb_transplant(node_d, node_d->left);
     }else
     {
         // find the minimum node in the lhs of the node_d
         temp = min_node(node_d->right);
+        //keep some information about temp node
+        temp_parent = temp->parent;
         temp_color = temp->color;
-        temp_right = temp->right;
+        temp_x = temp->right;
 
-
-        if(temp_right != nullptr && temp->parent == node_d){
-            temp_right->parent = temp;
+        // if temp is the smallest node in the right subtree of node_d and also child to it.
+        if(temp_x != nullptr && temp->parent == node_d){
+            temp_x->parent = temp;
         }else
         {
-            rb_transplant(temp, temp_right);
-            temp->right = node_d->right;
+            rb_transplant(temp, temp_x);
 
+            // make the right of node_d also right to node temp
+            temp->right = node_d->right;
             if(temp->right != nullptr){
                 temp->right->parent = temp;
             }
@@ -390,11 +397,19 @@ void RedBlackTree<T>::remove_util(Node<T>* node_d){
     // delete node_d
     delete node_d;
 
-    //if temp color was black that might result in breaking some propeties of rbTree after moving it.
-    if(temp_color == BLACK)
-    {
-        rb_remove_fixup(temp_right);
+    // create dummy node for temp_right
+    if(root != nullptr && temp_x == nullptr){
+        temp_x = new Node<T>(-1);
+        temp_x->color = BLACK;
+        temp_x->parent = temp_parent;
+        temp_parent->left = temp_x;
     }
+
+    // check properties of rbTree aren't broken
+    if(temp_color == BLACK){
+        rb_remove_fixup(temp_x);
+    }
+
 }
 
 
@@ -417,13 +432,15 @@ void RedBlackTree<T>::remove(T& element){
     remove(std::move(t));
 }
 
+
 // delete u and replace it with v
 template <typename T>
 void RedBlackTree<T>::rb_transplant(Node<T>* u, Node<T>* v){
+    // We don't delete the node we just transplant it.
     if(u == root)
     {
         root = v;
-    }else if (u = u->parent->left)
+    }else if (u == u->parent->left)
     {
         u->parent->left = v;
     }else
@@ -431,10 +448,29 @@ void RedBlackTree<T>::rb_transplant(Node<T>* u, Node<T>* v){
         u->parent->right = v;
     }
 
-    v->parent = u->parent;
+    if(v != nullptr)
+    {
+        v->parent = u->parent;
+    }
+}
+
+
+template <typename T>
+void RedBlackTree<T>::rb_remove_fixup(Node<T>* node_x){
+    while(node_x != root && node_x->color == BLACK){
+
+       if(node_x == node_x->parent->left){
+           rb_remove_fixup_left(node_x);
+       }else
+       {
+           rb_remove_fixup_right(node_x);
+       }
+    }
+
+    node_x->color = BLACK;
 }
 
 template <typename T>
-void RedBlackTree<T>::rb_remove_fixup(Node<T>* node){
-
+Node<T>* RedBlackTree<T>::min_node(Node<T>* node){
+    return (node->left == nullptr)? node : min_node(node->left);
 }

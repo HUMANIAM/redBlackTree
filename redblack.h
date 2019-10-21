@@ -45,8 +45,8 @@ private:
     // Utility functions
     void left_rotate(Node<T>*);
     void right_rotate(Node<T>*);
-    void min_node(Node<T>*);
-    void check_tree(Node<T>*);
+    Node<T>* min_node(Node<T>*);
+    void add_fixup(Node<T>*);
 
     void rb_transplant(Node<T>*, Node<T>*);
     void rb_remove_fixup(Node<T>*);
@@ -80,5 +80,9 @@ public:
     void print();
 };
 
+
+// utilities functins
+template <typename T>
+void create_NIL();
 #include "redblack.inl"
 #endif // REDBLACK_H

@@ -9,16 +9,13 @@ int main()
 //    f(10, new int);
 //    f(10);
     RedBlackTree<int>rdb;
-    std::vector<int> t;
-    int xx = 1;
-    rdb.add(xx);
-    t.push_back(4);
-    t.push_back(3);
-    t.push_back(2);
-    vector<bool> xxx= rdb.add(t);
-    //rdb.print();
+    std::vector<int> t = {10, 20, 30, 40, 35, 34};
 
-    cout << rdb.search(x) << endl;
+    vector<bool> xxx= rdb.add(t);
+    rdb.remove(34);
+    rdb.print();
+
+    //cout << rdb.search(x) << endl;
 
 
 //    ff(4);
