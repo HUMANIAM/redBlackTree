@@ -354,3 +354,21 @@ void RedBlackTree<T>::get_elements(Node<T> *ptr,std::vector<T>& v)
     get_elements(ptr->right,v);
 
 }
+template <class T>
+RedBlackTree<T>::~RedBlackTree<T>()
+{   clean_tree(root);
+    root = nullptr;
+}
+template <class T>
+void RedBlackTree<T>::clean_tree(Node<T>*node)
+{
+    if(node==nullptr)
+        return;
+    clean_tree(node->left);
+    clean_tree(node->right);
+    node->left = nullptr;
+    node->right = nullptr;
+    node->parent = nullptr;
+    delete node;
+
+}

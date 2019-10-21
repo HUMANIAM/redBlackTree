@@ -44,12 +44,13 @@ private:
     void rb_remove_fixup(Node<T*>);
     void print(Node<T>*);
     void get_elements(Node<T>*,std::vector<T>&);
-
+    void clean_tree(Node<T>*);
 public:
     RedBlackTree();
     // Add
     template < template < class ... > class Container, class ... Args >
     std::vector<bool> add(const Container<T,Args...>&);
+    ~RedBlackTree();
 
     bool add(T&&);
     bool add(T&);
