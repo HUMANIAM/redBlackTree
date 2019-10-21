@@ -1,13 +1,19 @@
 image : "rdieg/basics:latest"
 
+stages:
+  - build
+  - test
+
 build:
   stage: build
   tags:
     - docker
-  script: g++ /tests/tests.cpp -o mybinary
+  script: 
+    - qmake "CONFIG += optimize_full" "CONFIG += release"
+    - make
   artifacts:
     paths:
-      - mybinary
+      - RedBlack
 
 test:
   stage: test
@@ -15,5 +21,4 @@ test:
     - docker
 
   script:
-    - ./mybinary
-
+    - ./RedBlack

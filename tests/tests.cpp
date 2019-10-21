@@ -1,4 +1,4 @@
-#include "redblack.h"
+#include "../redblack.h"
 #define TEST true
 
 #define CATCH_CONFIG_RUNNER
