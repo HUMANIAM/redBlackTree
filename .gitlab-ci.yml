@@ -25,13 +25,8 @@ test:
 
 deploy:
   stage: deploy
-  ports:
-  - <PORT>:22
-  environment:
-    AUTHORIZED_KEYS: |
-      ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDGsvwv77VcEURMLZd7n2ORu8aius52fI6N8E5QPZbw0BAxDAWYo3LUBSdfRyFJ3uNOSVosNoo4/b73rsxQBozCxuIMZ7vW4KC/gG1UrD1VxYAQj4FFL/T8lw2ajMdUablyaxXNH5uDysfSxbFvG9IxJasuFZJ21PzTtEEC7eKFrdfgwxYd4GL7bBbitdHfaMtHo3LuASzbaS2eLDG+IgSqQq+7gfJVtRJ0k/P9x0HGKBnwNi47uSB7lAaY2bdEFVs0Rt1Uaat6B9TlFw38lkB1XYjdJaIfD+SgntV/9SNCroECb4sYuw3oEYCfbjRMkksa6zQKQCmnYNRy2o0Srpid 
   tags:
     - docker
   script:
-    - scp -p <PORT> RedBlack ninja@turtle.rdi:/home/ninja/cpp_team
+    - scp -p 22 RedBlack ninja@turtle.rdi:/home/ninja/cpp_team
 
