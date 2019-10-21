@@ -69,5 +69,34 @@ TEST_CASE("add function tests")
 
 TEST_CASE("search functions tests")
 {
+    SECTION("search single item exists")
+    {   RedBlackTree<int> rdb;
+        rdb.add(4);
+        CHECK(rdb.search(4)==true);
+    }
+    SECTION("search single item doesnt exist")
+    {   RedBlackTree<int> rdb;
+        rdb.add(4);
+        CHECK(rdb.search(5)==false);
+    }
+    SECTION("search root null")
+    {   RedBlackTree<int> rdb;
+        CHECK(rdb.search(4)==false);
+    }
+    SECTION("search list of items exists")
+    {   RedBlackTree<int> rdb;
+        std::vector<int> v ={1,2,3,4,5};
+        std::vector<bool> vb ={true,true,true,true,true};
+        rdb.add(v);
+        CHECK(rdb.search(v)==vb);
+    }
+    SECTION("search list of items  doesnt exist")
+    {   RedBlackTree<int> rdb;
+        std::vector<int> v ={1,2,3,4,5};
+        std::vector<bool> vb ={true,true,false,true,false};
+        std::vector<int> v1 ={1,2,6,4,8};
+        rdb.add(v);
+        CHECK(rdb.search(v1)==vb);
+    }
 
 }
