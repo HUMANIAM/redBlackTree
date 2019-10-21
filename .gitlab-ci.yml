@@ -1,4 +1,4 @@
-image: gcc-7-14
+image : "arwash.rdi:5000/common:basics"
 
 build:
   stage: build
