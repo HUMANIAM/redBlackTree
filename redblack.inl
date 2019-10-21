@@ -145,23 +145,14 @@ std::vector<bool> RedBlackTree<T>::add(const Container<T,Args...>& list)
 template <typename T>
 bool RedBlackTree<T>::search(T&& element)
 {
-    if(search_util(std::move(element)) != nullptr)
-    {
-        return  true;
-    }else{
-        return false;
-    }
+    return (search_util(std::move(element)) != nullptr);
 }
 
 template <typename T>
 bool RedBlackTree<T>::search(T& element)
 {
-    if(search_util(std::move(element)) != nullptr)
-    {
-        return  true;
-    }else{
-        return false;
-    }
+    T temp = element;
+    return (search_util(std::move(temp)) != nullptr);
 }
 
 
