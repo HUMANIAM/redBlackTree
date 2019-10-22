@@ -397,17 +397,20 @@ void RedBlackTree<T>::remove_util(Node<T>* node_d){
     // delete node_d
     delete node_d;
 
-    // create dummy node for temp_right
-    if(root != nullptr && temp_x == nullptr){
-        temp_x = new Node<T>(-1);
-        temp_x->color = BLACK;
-        temp_x->parent = temp_parent;
-        temp_parent->left = temp_x;
-    }
-
     // check properties of rbTree aren't broken
     if(temp_color == BLACK){
-        rb_remove_fixup(temp_x);
+        bool node_x_null = false;
+
+        // create dummy node for temp_right
+        if(root != nullptr && temp_x == nullptr){
+            temp_x = new Node<T>(-1);
+            temp_x->color = BLACK;
+            temp_x->parent = temp_parent;
+            temp_parent->left = temp_x;
+            node_x_null = true;
+        }
+
+        rb_remove_fixup(temp_x, node_x_null);
     }
 
 }
@@ -456,7 +459,7 @@ void RedBlackTree<T>::rb_transplant(Node<T>* u, Node<T>* v){
 
 
 template <typename T>
-void RedBlackTree<T>::rb_remove_fixup(Node<T>* node_x){
+void RedBlackTree<T>::rb_remove_fixup(Node<T>* node_x, bool delete_x){
     while(node_x != root && node_x->color == BLACK){
 
        if(node_x == node_x->parent->left){
@@ -467,7 +470,14 @@ void RedBlackTree<T>::rb_remove_fixup(Node<T>* node_x){
        }
     }
 
-    node_x->color = BLACK;
+     node_x->color = BLACK;
+
+    // if node_x is dummy node delete
+    if(delete_x){
+        if(node_x == node_x->parent->left){node_x->parent->left = nullptr;}
+        else{node_x->parent->right == nullptr;}
+        delete node_x;
+    }
 }
 
 template <typename T>
@@ -483,7 +493,6 @@ void RedBlackTree<T>::remove_fixup_case1(Node<T>* sibling_w, Node<T>* node_x){
     node_x->parent->color = RED;
     left_rotate(node_x->parent);
     sibling_w = node_x->parent->right;
-
 }
 
 
@@ -494,25 +503,66 @@ Node<T>* RedBlackTree<T>::remove_fixup_case2(Node<T>* sibling_w, Node<T>* node_x
 }
 
 
+template <class T>
+Node<T>* RedBlackTree<T>::remove_fixup_case3(Node<T>* sibling_w, Node<T>* node_x){
+    if(sibling_w->left != nullptr){
+        sibling_w->left->color = BLACK;
+    }
+
+    sibling_w->color = RED;
+    right_rotate(sibling_w);
+
+    return node_x->parent->right;
+}
+
+
+template <class T>
+Node<T>* RedBlackTree<T>::remove_fixup_case4(Node<T>* sibling_w, Node<T>* node_x){
+    sibling_w->color = node_x->parent->color;
+
+    node_x->parent->color = RED;
+    if(sibling_w->right != nullptr){
+        sibling_w->right->color = BLACK;
+    }
+
+    left_rotate(node_x->parent);
+    return root;
+}
+
+
+
 template <typename T>
-void RedBlackTree<T>::rb_remove_fixup_left(Node<T>* node_x){
+void RedBlackTree<T>::rb_remove_fixup_left(Node<T>*& node_x){
+    /*Deal with NIL Nodes as they aren't exist so they must break your condition. if the condition
+     * based on them. say a condition based on the children is black and the children were null that
+     * break the condition.
+     * */
+
+    // sibiling of node_x is always exist where node_x is doubly black
     Node<T>* sibling_w = node_x->parent->right;
 
-    // case 1
     if(sibling_w != nullptr && sibling_w->color == RED){
+        // case 1
         remove_fixup_case1(sibling_w, node_x);
     }
 
-    // case 2
-    bool w_left_black  = (sibling_w->left == nullptr) || (sibling_w->left->color == BLACK);
-    bool w_right_black = (sibling_w->right == nullptr) || (sibling_w->right->color == BLACK);
+    // children of w_sibling must be not null and has black color
+    bool w_left_black  = (sibling_w->left != nullptr) && (sibling_w->left->color == BLACK);
+    bool w_right_black = (sibling_w->right != nullptr) && (sibling_w->right->color == BLACK);
     if(w_left_black && w_right_black){
+        // case 2
         node_x = remove_fixup_case2(sibling_w, node_x);
+
+    }else if((sibling_w->right != nullptr) && (sibling_w->right->color == BLACK)){
+       // case 3
+        sibling_w = remove_fixup_case3(sibling_w, node_x);
+
+    }else{
+        // case 4
+        node_x = remove_fixup_case4(sibling_w, node_x);
     }
-
-
-
 }
+
 
 template <typename T>
 void RedBlackTree<T>::rb_remove_fixup_right(Node<T>* node_x){

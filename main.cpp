@@ -12,7 +12,7 @@ int main()
     std::vector<int> t = {10, 20, 30, 40, 35, 34, 100, 90, 80, 70, 60, 50};
 
     vector<bool> xxx= rdb.add(t);
-    rdb.remove(40);
+    rdb.remove(70);
     rdb.print();
 
     //cout << rdb.search(x) << endl;
