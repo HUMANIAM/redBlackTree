@@ -53,10 +53,12 @@ private:
     void rb_remove_fixup_left(Node<T>*&);
     void rb_remove_fixup_right(Node<T>*);
     void remove_util(Node<T>*);
-    void remove_fixup_case1(Node<T>*, Node<T>*);
+    Node<T>* remove_fixup_case1(Node<T>*, Node<T>*);
     Node<T>* remove_fixup_case2(Node<T>*, Node<T>*);
     Node<T>* remove_fixup_case3(Node<T>*, Node<T>*);
     Node<T>* remove_fixup_case4(Node<T>*, Node<T>*);
+    bool haschild(Node<T>*);
+    void delete_dummy(Node<T>*);
     void print(Node<T>*);
 
 public:
