@@ -1,5 +1,4 @@
 #include "../redblack.h"
-#define TEST true
 #define CATCH_CONFIG_RUNNER
 #define TEST true
 #include <catch.hpp>
@@ -169,43 +168,48 @@ TEST_CASE("Benchmark")
 }
 
 
+
 TEST_CASE("remove function tests")
 {
     SECTION("tree is empty")
     {
-        RedBlackTree<int> red_black_tree;
-        red_black_tree.remove(1);
-        CHECK(true);
+        RedBlackTree<int> rbt;
+        rbt.remove(1);
+
+        bool x = rbt.root_black() && !rbt.two_adjacent_red() && rbt.height_black();
+        CHECK(x);
 
     }
-    SECTION("add vector")
+    SECTION("remove non_exist element")
     {
-        RedBlackTree<int> red_black_tree;
-        std::vector<int> v={1,2,3,4,5,6,7};
-        std::vector<bool> vb = red_black_tree.add(v);
-        std::vector<bool> correct = {true,true,true,true,true,true,true};
-        CHECK(vb == correct);
+        RedBlackTree<int> rbt;
+        rbt.add(10);
+        rbt.remove(1);
+
+        bool x = rbt.root_black() && !rbt.two_adjacent_red() && rbt.height_black();
+        CHECK(x);
     }
-    SECTION("add dublicate")
+    SECTION("remove list of elements")
     {
-        RedBlackTree<int> red_black_tree;
-        bool added = red_black_tree.add(4);
-        int temp = 4;
-        bool notAdded = red_black_tree.add(temp);
-        CHECK(added!=notAdded);
+        RedBlackTree<int> rbt;
+        vector<int> t = {1, 2, 3, 4, 5, 6, 7};
+        rbt.add(t);
+        rbt.remove(t);
+
+        bool x = rbt.root_black() && !rbt.two_adjacent_red() && rbt.height_black();
+        CHECK(x);
 
     }
-    SECTION("vector dublicates")
+    SECTION("remove list of non-exist elements")
     {
-        std::vector<int> v = {1,4,1,4};
-        std::vector<bool> correct = {true,true,false,false};
-        RedBlackTree<int> red_black_tree;
-        std::vector<bool> vb = red_black_tree.add(v);
-        CHECK(vb==correct);
+        RedBlackTree<int> rbt;
+        vector<int> t = {1, 2, 3, 4, 5, 6, 7};
+        vector<int> tt = {10, 20, 30, 40};
+        rbt.add(t);
+        rbt.remove(tt);
 
-
+        bool x = rbt.root_black() && !rbt.two_adjacent_red() && rbt.height_black();
+        CHECK(x);
     }
 
 }
-
-

@@ -650,6 +650,7 @@ void RedBlackTree<T>::delete_leave(Node<T>*& node_d, Node<T>*& temp_x, bool& nod
     if(node_d == root){
         delete node_d;
         root = nullptr;
+        return;
     }
 
     // keep the node_d if it is black to used in fixing the tree height black else delete it.
@@ -717,33 +718,26 @@ bool RedBlackTree<T>::root_black(){
 
 template <class T>
 bool RedBlackTree<T>::two_adjacent_red(){
-    vector<Color> vcolors;
-    get_color(root, vcolors);
-
-    // check no two adjacent nodes are red
-    for(size_t i = 0; vcolors.size()-1; i++){
-        if((vcolors[i] == RED) && (vcolors[i+1] == RED)){
-            return true;
-        }
-    }
-    return false;
+    return two_adjacent_red(root);
 }
 
 template <class T>
 bool RedBlackTree<T>::height_black(){
-        std::pair<int,bool> black_checker;
-       return height_black(black_checker,root).second;
+       return height_black(root).second;
 }
 
 template <class T>
-void RedBlackTree<T>::get_color(Node<T> *ptr,std::vector<Color>& v)
+bool RedBlackTree<T>::two_adjacent_red(Node<T>* current)
 {
-    if(ptr == nullptr)
-        return;
-    get_elements(ptr->left,v);
-    v.push_back(ptr->color);
-    get_elements(ptr->right,v);
+    if(current == nullptr){return false;}
+
+    bool left_tree = two_adjacent_red(current->left);
+    if(left_tree){return true;}
+
+    bool right_tree = two_adjacent_red(current->right);
+    return  left_tree || right_tree;
 }
+
 template <class T>
 std::pair<int,bool> RedBlackTree<T>::height_black(Node<T>*node)
 {
