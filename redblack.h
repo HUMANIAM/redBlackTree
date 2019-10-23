@@ -5,25 +5,17 @@
 #include <memory>
 #include <iostream>
 #include <utility>
-/////////////////////////////
-template <typename T>
-void f(T xx, T* x = nullptr);
 
-template <typename T>
-void ff(const T&){
-    std::cout << "hello" << std::endl;
-}
-
-/////////////////////////////
 enum Color{RED,BLACK};
 template <typename T>
 struct Node
 {
-    Node * left;
-    Node * right;
-    Node * parent;
     T element;
-    Color color;
+    Color color = RED;
+    Node * left = nullptr;
+    Node * right = nullptr;
+    Node * parent = nullptr;
+    Node();
     Node(T&&);
     Node(T&);
 };
@@ -33,59 +25,74 @@ class RedBlackTree
 {
 
 private:
-    static Node<T> *root;
+    Node<T> *root;
+    int size_rb = 0;
     bool add(T&& , Node<T>*);
     bool add(T& , Node<T>*);
-    //bool search(T&&,Node<T>*);    // unnecessary
-    //bool se, Node<T>* = nullptrarch(T&,Node<T>*);     // unnecessery
     void right(Node<T>*);
     void left(Node<T>*);
-    Node<T>* search_util(T&&, Node<T>* = root);
+    Node<T>* search_util(T&&, Node<T>*);
 
     // Utility functions
     void left_rotate(Node<T>*);
     void right_rotate(Node<T>*);
     Node<T>* min_node(Node<T>*);
-    void add_fixup(Node<T>*);
+    void check_tree(Node<T>*);
 
-    void rb_transplant(Node<T>*, Node<T>*);
-    void rb_remove_fixup(Node<T>*, bool);
-    void rb_remove_fixup_left(Node<T>*&);
-    void rb_remove_fixup_right(Node<T>*);
+    //**** Fuctions used when fix the tree after deletion ****///
     void remove_util(Node<T>*);
-    Node<T>* remove_fixup_case1(Node<T>*, Node<T>*);
-    Node<T>* remove_fixup_case2(Node<T>*, Node<T>*);
-    Node<T>* remove_fixup_case3(Node<T>*, Node<T>*);
-    Node<T>* remove_fixup_case4(Node<T>*, Node<T>*);
+    void rb_remove_fixup(Node<T>*, bool);
+
+    // when the node x located in the left of the parent
+    void rb_remove_fixup_left(Node<T>*&);
+    Node<T>* remove_fixup_left_case1(Node<T>*, Node<T>*);
+    Node<T>* remove_fixup_left_case2(Node<T>*, Node<T>*);
+    Node<T>* remove_fixup_left_case3(Node<T>*, Node<T>*);
+    Node<T>* remove_fixup_left_case4(Node<T>*, Node<T>*);
+
+    // when the node x located in the left of the parent
+    void rb_remove_fixup_right(Node<T>*&);
+    Node<T>* remove_fixup_right_case1(Node<T>*, Node<T>*);
+    Node<T>* remove_fixup_right_case2(Node<T>*, Node<T>*);
+    Node<T>* remove_fixup_right_case3(Node<T>*, Node<T>*);
+    Node<T>* remove_fixup_right_case4(Node<T>*, Node<T>*);
+
+    // Utility Functions
     bool haschild(Node<T>*);
     void delete_dummy(Node<T>*);
+    void rb_transplant(Node<T>*, Node<T>*);
+    void delete_leave(Node<T>*&, Node<T>*&, bool&);
     void print(Node<T>*);
 
 public:
     RedBlackTree();
     // Add
-    template < template < class ... > class Container, class ... Args >
-    std::vector<bool> add(const Container<T,Args...>&);
-
     bool add(T&&);
     bool add(T&);
+    template < template < class ... > class Container, class ... Args >
+    std::vector<bool> add(const Container<T,Args...>&);
 
     // Remove
     void remove(T&&);
     void remove(T&);
-
     template < template < class ... > class Container, class ... Args >
-    std::vector<bool> remove(Container<T,Args ...>);
+    void remove(const Container<T,Args...>&);
 
     // Search
     bool search(T&&);
     bool search(T&);
-
     template < template < class ... > class Container, class ... Args >
     std::vector<bool> search(const Container<T,Args...>&);
 
     //print the red black tree in ascending order
     void print();
+
+    int size_rbt();
+
+    bool check_element_order(std::vector<T>);
+    void get_elements(Node<T>*,std::vector<T>&);
+    void clean_tree(Node<T>*);
+
 };
 
 
