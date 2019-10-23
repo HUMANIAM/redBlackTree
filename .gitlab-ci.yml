@@ -1,0 +1,32 @@
+image : "rdieg/basics:latest"
+
+stages:
+  - build
+  - test
+  - deploy
+
+build:
+  stage: build
+  tags:
+    - docker
+  script: 
+    - qmake "CONFIG += optimize_full" "CONFIG += release"
+    - make
+  artifacts:
+    paths:
+      - RedBlack
+
+test:
+  stage: test
+  tags:
+    - docker
+  script:
+    - ./RedBlack
+
+deploy:
+  stage: deploy
+  tags:
+    - shell
+  script:
+    - scp RedBlack ninja@turtle.rdi:/home/ninja/cpp_team/RedBlackTree
+

@@ -127,7 +127,6 @@ std::vector<bool> RedBlackTree<T>::add(const Container<T,Args...>& list)
     for(T element : list)
     {
         search_results.push_back(add(std::move(element)));
-        print();
     }
     return search_results;
 }
@@ -173,7 +172,7 @@ std::vector<bool> RedBlackTree<T>::search(const Container<T,Args...>& list)
 {   std::vector<bool> search_results;
     for(T element : list)
     {
-        search_results.push_back(search(std::move(element), root));
+        search_results.push_back(search_util(std::move(element), root));
     }
     return search_results;
 }
@@ -275,8 +274,8 @@ void RedBlackTree<T>::print(Node<T>*current)
     { return;
     }
     print(current->left);
-   std::string color = current->color==0?"RED":"Black";
-   std::cout<<"element : "<<current->element<<"  color: "<<color<<std::endl;
+    std::string color = current->color==0?"RED":"Black";
+    std::cout<<"element : "<<current->element<<"  color: "<<color<<std::endl;
     print(current->right);
 
 }
@@ -328,7 +327,8 @@ void RedBlackTree<T>::right_rotate(Node<T> *current ) {
             current->parent->left = temp;
     /* Finally, put x on temp's right */
     temp->right = current;
-   current->parent = temp;
+    current->parent = temp;
+
 }
 
 /////////////////////////////////////////////// Remove Node From RBTree  ///////////////////
@@ -687,5 +687,22 @@ void RedBlackTree<T>::get_elements(Node<T> *ptr,std::vector<T>& v)
     get_elements(ptr->left,v);
     v.push_back(ptr->element);
     get_elements(ptr->right,v);
+}
+template <class T>
+RedBlackTree<T>::~RedBlackTree<T>()
+{   clean_tree(root);
+    root = nullptr;
+}
+template <class T>
+void RedBlackTree<T>::clean_tree(Node<T>*node)
+{
+    if(node==nullptr)
+        return;
+    clean_tree(node->left);
+    clean_tree(node->right);
+    node->left = nullptr;
+    node->right = nullptr;
+    node->parent = nullptr;
+    delete node;
 
 }

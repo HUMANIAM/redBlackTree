@@ -1,11 +1,10 @@
 #include "../redblack.h"
 #define TEST true
-
 #define CATCH_CONFIG_RUNNER
 #define TEST true
 #include <catch.hpp>
 #include <chrono>
-int main( int argc, char* const argv[] )
+int main()
 {
     //If the TEST macro is defined to be true,
     //runCatchTests will be called and immediately
@@ -104,14 +103,21 @@ TEST_CASE("rotations")
         CHECK(red_black_tree.check_element_order(vb));
 
     }
+    SECTION("incorrect rotation")
+    {
+        std::vector<int> v = {5,3,6,7,8};
+        RedBlackTree<int> red_black_tree;
+        red_black_tree.add(v);
+        std::vector<int> vb = {5,3,6,7,8};
+        CHECK(!red_black_tree.check_element_order(vb));
+    }
 }
 
 TEST_CASE("Benchmark")
 {
     SECTION("map insert sorted")
     {
-
-        std::cout<<"Sorted bench zeft"<<std::endl;
+        std::cout<<"Sorted benchmark"<<std::endl;
         RedBlackTree<int> red_black_tree;
         std::map<int,int> std_map;
         auto insert_time_rbt = std::chrono::high_resolution_clock::now();
@@ -136,8 +142,8 @@ TEST_CASE("Benchmark")
     }
     SECTION("map insert unsorted")
     {
-        std::srand(1);
-        std::cout<<std::endl<<std::endl<<"random bench zeft"<<std::endl;
+        std::srand(2);
+        std::cout<<std::endl<<std::endl<<"random benchmark"<<std::endl;
         RedBlackTree<int> red_black_tree;
         std::map<int,int> std_map;
         auto insert_time_rbt = std::chrono::high_resolution_clock::now();
