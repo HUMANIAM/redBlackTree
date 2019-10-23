@@ -21,14 +21,14 @@ int main()
 
 TEST_CASE("add function tests")
 {
-    SECTION("single item")
+    SECTION("Integer single item")
     {
         RedBlackTree<int> red_black_tree;
-        bool added = red_black_tree.add(1);
+        bool added = red_black_tree.add(-1);
         CHECK(added == true);
 
     }
-    SECTION("add vector")
+    SECTION("Integer add vector")
     {
         RedBlackTree<int> red_black_tree;
         std::vector<int> v={1,2,3,4,5,6,7};
@@ -36,7 +36,7 @@ TEST_CASE("add function tests")
         std::vector<bool> correct = {true,true,true,true,true,true,true};
         CHECK(vb == correct);
     }
-    SECTION("add dublicate")
+    SECTION("Integer add dublicate")
     {
         RedBlackTree<int> red_black_tree;
         bool added = red_black_tree.add(4);
@@ -45,11 +45,45 @@ TEST_CASE("add function tests")
         CHECK(added!=notAdded);
 
     }
-    SECTION("vector dublicates")
+    SECTION("Integer vector dublicates")
     {
         std::vector<int> v = {1,4,1,4};
         std::vector<bool> correct = {true,true,false,false};
         RedBlackTree<int> red_black_tree;
+        std::vector<bool> vb = red_black_tree.add(v);
+        CHECK(vb==correct);
+
+
+    }
+    SECTION("String single item")
+    {
+        RedBlackTree<std::string> red_black_tree;
+        bool added = red_black_tree.add("test string");
+        CHECK(added == true);
+
+    }
+    SECTION("String add vector")
+    {
+        RedBlackTree<std::string> red_black_tree;
+        std::vector<std::string> v={"aa","ba","ab","cb","dd"};
+        std::vector<bool> vb = red_black_tree.add(v);
+        std::vector<bool> correct = {true,true,true,true,true};
+        CHECK(vb == correct);
+    }
+    SECTION("String add dublicate")
+    {
+        RedBlackTree<std::string> red_black_tree;
+        bool added = red_black_tree.add("aa");
+        std::string temp = "aa";
+        bool notAdded = red_black_tree.add(temp);
+        CHECK(added!=notAdded);
+
+    }
+    SECTION("String vector dublicates")
+    {
+        std::vector<std::string> v = {"aa","bb","aa","bb"};
+        std::vector<bool> correct = {true,true,false,false};
+        RedBlackTree<std::string> red_black_tree;
         std::vector<bool> vb = red_black_tree.add(v);
         CHECK(vb==correct);
 
@@ -60,32 +94,61 @@ TEST_CASE("add function tests")
 
 TEST_CASE("search functions tests")
 {
-    SECTION("search single item exists")
+    SECTION("Integer search single item exists")
     {   RedBlackTree<int> red_black_tree;
         red_black_tree.add(4);
         CHECK(red_black_tree.search(4)==true);
     }
-    SECTION("search single item doesnt exist")
+    SECTION("Integer search single item doesnt exist")
     {   RedBlackTree<int> red_black_tree;
         red_black_tree.add(4);
         CHECK(red_black_tree.search(5)==false);
     }
-    SECTION("search root null")
+    SECTION("Integer search root null")
     {   RedBlackTree<int> red_black_tree;
         CHECK(red_black_tree.search(4)==false);
     }
-    SECTION("search list of items exists")
+    SECTION("Integer search list of items exists")
     {   RedBlackTree<int> red_black_tree;
         std::vector<int> v ={1,2,3,4,5};
         std::vector<bool> vb ={true,true,true,true,true};
         red_black_tree.add(v);
         CHECK(red_black_tree.search(v)==vb);
     }
-    SECTION("search list of items  doesnt exist")
+    SECTION("Integer search list of items  doesnt exist")
     {   RedBlackTree<int> red_black_tree;
-        std::vector<int> v ={1,2,3,4,5};
-        std::vector<bool> vb ={true,true,false,true,false};
-        std::vector<int> v1 ={1,2,6,4,8};
+        std::vector<int> v ={1,2,3,4};
+        std::vector<bool> vb ={true,false};
+        std::vector<int> v1 ={1,5};
+        red_black_tree.add(v);
+        CHECK(red_black_tree.search(v1)==vb);
+    }
+    SECTION("String search single item exists")
+    {   RedBlackTree<std::string> red_black_tree;
+        red_black_tree.add("aa");
+        CHECK(red_black_tree.search("aa")==true);
+    }
+    SECTION("String search single item doesnt exist")
+    {   RedBlackTree<std::string> red_black_tree;
+        red_black_tree.add("ca");
+        CHECK(red_black_tree.search("ac")==false);
+    }
+    SECTION("String search root null")
+    {   RedBlackTree<std::string> red_black_tree;
+        CHECK(red_black_tree.search("baba")==false);
+    }
+    SECTION("String search list of items exists")
+    {   RedBlackTree<std::string> red_black_tree;
+        std::vector<std::string> v ={"aba","cacaca"};
+        std::vector<bool> vb ={true,true};
+        red_black_tree.add(v);
+        CHECK(red_black_tree.search(v)==vb);
+    }
+    SECTION("String search list of items  doesnt exist")
+    {   RedBlackTree<std::string> red_black_tree;
+        std::vector<std::string> v ={"vagsdfa","fasfgsadfgsa"};
+        std::vector<bool> vb ={true,false};
+        std::vector<std::string> v1 ={"vagsdfa","afaf"};
         red_black_tree.add(v);
         CHECK(red_black_tree.search(v1)==vb);
     }
