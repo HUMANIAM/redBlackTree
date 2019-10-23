@@ -731,7 +731,8 @@ bool RedBlackTree<T>::two_adjacent_red(){
 
 template <class T>
 bool RedBlackTree<T>::height_black(){
-
+        std::pair<int,bool> black_checker;
+       return height_black(black_checker,root).second;
 }
 
 template <class T>
@@ -743,8 +744,28 @@ void RedBlackTree<T>::get_color(Node<T> *ptr,std::vector<Color>& v)
     v.push_back(ptr->color);
     get_elements(ptr->right,v);
 }
+template <class T>
+std::pair<int,bool> RedBlackTree<T>::height_black(Node<T>*node)
+{
+    if(node==nullptr)
+    {
+        return make_pair(0,true);
+    }
+    std::pair<int,bool> left = height_black(node->left);
+    if(!left.second)
+        return make_pair(-1,false);
+    std::pair<int,bool> right = height_black(node->right);
+    if(!right.second)
+        return make_pair(-1,false);
+    if(right.first == left.first)
+    {
+        if(node->color==BLACK)
+            return make_pair(left.first+1,true);
+        return make_pair(left.first,true);
+    }
+    return make_pair(-1,false);
 
-
+}
 
 
 
