@@ -731,11 +731,13 @@ bool RedBlackTree<T>::two_adjacent_red(Node<T>* current)
 {
     if(current == nullptr){return false;}
 
-    bool left_tree = two_adjacent_red(current->left);
-    if(left_tree){return true;}
+    bool left_red = (current->left != nullptr && current->left->color == RED);
+    if((current->color == RED) && left_red){ return true; }
 
-    bool right_tree = two_adjacent_red(current->right);
-    return  left_tree || right_tree;
+    bool right_red = (current->right != nullptr && current->right->color == RED);
+    if((current->color == RED) && right_red){ return true; }
+
+    return  two_adjacent_red(current->right) || two_adjacent_red(current->left);
 }
 
 template <class T>
