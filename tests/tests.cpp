@@ -177,61 +177,6 @@ TEST_CASE("rotations")
     }
 }
 
-TEST_CASE("Insertion Benchmark")
-{
-    SECTION("map insert sorted")
-    {
-        std::cout<<"Sorted benchmark"<<std::endl;
-        RedBlackTree<int> red_black_tree;
-        std::map<int,int> std_map;
-        auto insert_time_rbt = std::chrono::high_resolution_clock::now();
-        for(int i=0;i<100000;i++)
-        {
-            red_black_tree.add(i);
-        }
-        auto finish_insert_time_rbt = std::chrono::high_resolution_clock::now();
-        auto insert_time_map = std::chrono::high_resolution_clock::now();
-        for(int i=0;i<100000;i++)
-        {
-            std_map[i] = i;
-        }
-        auto finish_insert_time_map = std::chrono::high_resolution_clock::now();
-        auto map_duration = std::chrono::duration_cast<std::chrono::milliseconds>
-                (finish_insert_time_map - insert_time_map).count();
-        std::cout<<"Time for map =  "<<map_duration<<std::endl;
-        auto rbt_duration = std::chrono::duration_cast<std::chrono::milliseconds>
-                (finish_insert_time_rbt - insert_time_rbt).count();
-        std::cout<<"Time for rbt =  "<<rbt_duration<<std::endl;
-
-    }
-    SECTION("map insert unsorted")
-    {
-        std::srand(2);
-        std::cout<<std::endl<<std::endl<<"random benchmark"<<std::endl;
-        RedBlackTree<int> red_black_tree;
-        std::map<int,int> std_map;
-        auto insert_time_rbt = std::chrono::high_resolution_clock::now();
-        for(int i=0;i<1000000;i++)
-        {
-            red_black_tree.add(rand()%1000000);
-        }
-        auto finish_insert_time_rbt = std::chrono::high_resolution_clock::now();
-        auto insert_time_map = std::chrono::high_resolution_clock::now();
-        for(int i=0;i<1000000;i++)
-        {
-            std_map[i] = rand()%100000;
-        }
-        auto finish_insert_time_map = std::chrono::high_resolution_clock::now();
-        auto map_duration = std::chrono::duration_cast<std::chrono::milliseconds>
-                (finish_insert_time_map - insert_time_map).count();
-        std::cout<<"Time for map =  "<<map_duration<<std::endl;
-        auto rbt_duration = std::chrono::duration_cast<std::chrono::milliseconds>
-                (finish_insert_time_rbt - insert_time_rbt).count();
-        std::cout<<"Time for rbt =  "<<rbt_duration<<std::endl;
-
-    }
-}
-
 TEST_CASE("remove function tests")
 {
     SECTION("tree is empty")
@@ -299,6 +244,71 @@ TEST_CASE("remove function tests")
 
 }
 
+///  ####### Benchmark for insertion and deletion of our RB tree agains STL Map (implemented using RB Tree also)
+TEST_CASE("Insertion Benchmark")
+{
+    SECTION("map insert sorted")
+    {
+        RedBlackTree<int> red_black_tree;
+        std::map<int,int> std_map;
+        auto insert_time_rbt = std::chrono::high_resolution_clock::now();
+        for(int i=0;i<10000000;i++)
+        {
+            red_black_tree.add(i);
+        }
+        auto finish_insert_time_rbt = std::chrono::high_resolution_clock::now();
+        auto insert_time_map = std::chrono::high_resolution_clock::now();
+        for(int i=0;i<10000000;i++)
+        {
+            std_map[i] = i;
+        }
+
+        std::cout << "\n          #####################################\n";
+        std::cout << "          Insertion Benchmark For Sorted Numbers\n";
+        std::cout << "          #####################################\n";
+
+        auto finish_insert_time_map = std::chrono::high_resolution_clock::now();
+        auto map_duration = std::chrono::duration_cast<std::chrono::milliseconds>
+                (finish_insert_time_map - insert_time_map).count();
+        std::cout<<"Insertion Time for map for 10000000 items =  " << map_duration << std::endl;
+        auto rbt_duration = std::chrono::duration_cast<std::chrono::milliseconds>
+                (finish_insert_time_rbt - insert_time_rbt).count();
+        std::cout << "Insertion Time for rbTree for 10000000 items =  " << rbt_duration << std::endl;
+
+    }
+    SECTION("map insert unsorted")
+    {
+        std::srand(2);
+        RedBlackTree<int> red_black_tree;
+        std::map<int,int> std_map;
+        auto insert_time_rbt = std::chrono::high_resolution_clock::now();
+        for(int i=0;i<10000000;i++)
+        {
+            red_black_tree.add(rand()%1000000);
+        }
+        auto finish_insert_time_rbt = std::chrono::high_resolution_clock::now();
+        auto insert_time_map = std::chrono::high_resolution_clock::now();
+        for(int i=0;i<10000000;i++)
+        {
+            std_map[i] = rand()%100000;
+        }
+
+        std::cout << "\n          #####################################\n";
+        std::cout << "          Insertion Benchmark For Random Numbers\n";
+        std::cout << "          #####################################\n";
+        auto finish_insert_time_map = std::chrono::high_resolution_clock::now();
+        auto map_duration = std::chrono::duration_cast<std::chrono::milliseconds>
+                (finish_insert_time_map - insert_time_map).count();
+        std::cout<<"Insertion Time for map for 10000000 items =  " << map_duration << std::endl;
+
+        auto rbt_duration = std::chrono::duration_cast<std::chrono::milliseconds>
+                (finish_insert_time_rbt - insert_time_rbt).count();
+        std::cout << "Insertion Time for rbTree for 10000000 items =  " << rbt_duration << std::endl;
+
+    }
+}
+
+
 TEST_CASE("deletion Benchmark")
 {
     SECTION("map deletion of sorted items")
@@ -307,28 +317,29 @@ TEST_CASE("deletion Benchmark")
         std::map<int,int> std_map;
 
         // insert the same number of item in stl map and rbtree
-        for(int i=0;i<100000;i++){   rbt.add(i); }
-        for(int i=0;i<100000;i++){ std_map[i] = i; }
+        for(int i=0;i<10000000;i++){   rbt.add(i); }
+        for(int i=0;i<10000000;i++){ std_map[i] = i; }
 
         // deletion time taken by rbt
         auto insert_time_rbt = std::chrono::high_resolution_clock::now();
-        for(int i=0;i<100000;i++){   rbt.remove(i); }
+        for(int i=0;i<10000000;i++){   rbt.remove(i); }
         auto finish_insert_time_rbt = std::chrono::high_resolution_clock::now();
 
         // deletion time taken by stl map
         auto insert_time_map = std::chrono::high_resolution_clock::now();
-        for(int i=0;i<100000;i++){ std_map.erase(i); }
+        for(int i=0;i<10000000;i++){ std_map.erase(i); }
         auto finish_insert_time_map = std::chrono::high_resolution_clock::now();
-
-        std::cout << "Deletion Benchmark For Sorted Numbers\n";
-        std::cout << "####################\n";
+\
+        std::cout << "\n          #####################################\n";
+        std::cout << "          Deletion Benchmark For Sorted Numbers\n";
+        std::cout << "          #####################################\n";
         auto map_duration = std::chrono::duration_cast<std::chrono::milliseconds>
                 (finish_insert_time_map - insert_time_map).count();
-        std::cout<<"Deletion Time for map =  " << map_duration << std::endl;
+        std::cout<<"Deletion Time for map for 10000000 items =  " << map_duration << std::endl;
 
         auto rbt_duration = std::chrono::duration_cast<std::chrono::milliseconds>
                 (finish_insert_time_rbt - insert_time_rbt).count();
-        std::cout << "Deletion Time for rbTree =  " << rbt_duration << std::endl;
+        std::cout << "Deletion Time for rbTree for 10000000 items =  " << rbt_duration << std::endl;
 
     }
     SECTION("map deletion of sorted items")
@@ -353,8 +364,9 @@ TEST_CASE("deletion Benchmark")
         for(auto& c : rnd_nums){ std_map.erase(c); }
         auto finish_delete_time_map = std::chrono::high_resolution_clock::now();
 
-        std::cout << "Deletion Benchmark For UnSorted Numbers\n";
-        std::cout << "####################\n";
+        std::cout << "\n          #####################################\n";
+        std::cout << "          Deletion Benchmark For Random Numbers\n";
+        std::cout << "          #####################################\n";
         auto map_duration = std::chrono::duration_cast<std::chrono::milliseconds>
                 (finish_delete_time_map - delete_time_map).count();
         std::cout<<"Deletion Time for map =  " << map_duration << std::endl;
