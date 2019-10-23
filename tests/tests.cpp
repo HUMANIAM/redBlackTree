@@ -99,7 +99,7 @@ TEST_CASE("rotations")
         std::vector<int> v = {1,4,3,2};
         RedBlackTree<int> red_black_tree;
         red_black_tree.add(v);
-        std::vector<int> vb = {1,2,3,4};
+        std::vector<int> vb = {3,1,2,4};
         CHECK(red_black_tree.check_element_order(vb));
 
     }

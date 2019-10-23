@@ -684,8 +684,8 @@ void RedBlackTree<T>::get_elements(Node<T> *ptr,std::vector<T>& v)
 {
     if(ptr == nullptr)
         return;
-    get_elements(ptr->left,v);
     v.push_back(ptr->element);
+    get_elements(ptr->left,v);
     get_elements(ptr->right,v);
 }
 template <class T>
