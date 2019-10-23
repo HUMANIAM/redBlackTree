@@ -3,6 +3,7 @@
 #define TEST true
 #include <catch.hpp>
 #include <chrono>
+#include <time.h>
 int main()
 {
     //If the TEST macro is defined to be true,
@@ -175,7 +176,7 @@ TEST_CASE("rotations")
     }
 }
 
-/*TEST_CASE("Benchmark")
+/*TEST_CASE("Insertion Benchmark")
 {
     SECTION("map insert sorted")
     {
@@ -255,7 +256,7 @@ TEST_CASE("remove function tests")
     SECTION("remove list of elements")
     {
         RedBlackTree<int> rbt;
-        vector<int> t = {1, 2, 3, 4, 5, 6, 7};
+        std::vector<int> t = {1, 2, 3, 4, 5, 6, 7};
         rbt.add(t);
         rbt.remove(t);
 
@@ -266,8 +267,8 @@ TEST_CASE("remove function tests")
     SECTION("remove list of non-exist elements")
     {
         RedBlackTree<int> rbt;
-        vector<int> t = {1, 2, 3, 4, 5, 6, 7};
-        vector<int> tt = {10, 20, 30, 40};
+        std::vector<int> t = {1, 2, 3, 4, 5, 6, 7};
+        std::vector<int> tt = {10, 20, 30, 40};
         rbt.add(t);
         rbt.remove(tt);
 
@@ -278,24 +279,88 @@ TEST_CASE("remove function tests")
     {
         // add random values
         RedBlackTree<int> rbt;
-        for(int i=0;i<150;i++)
+        for(int i=0;i<10000000;i++)
         {
             rbt.add(rand()%100000);
         }
 
         // remove random values
-//        for(int i=0;i<1000000;i++)
-//        {
-//            rbt.remove(rand()%100000);
-//        }
-
+        for(int i=0;i<1000000;i++)
+        {
+            rbt.remove(rand()%100000);
+        }
         // check properties of rbtree aren't broken
-        bool b1 = rbt.root_black() ;
-        bool b2 =!rbt.two_adjacent_red() ;
-        bool b3 = rbt.height_black();
-//        bool x = rbt.root_black() && !rbt.two_adjacent_red() && rbt.height_black();
-        bool x = b1 && b2 && b3;
+        bool x = rbt.root_black() && !rbt.two_adjacent_red() && rbt.height_black();
         CHECK(x);
     }
 
 }
+
+TEST_CASE("deletion Benchmark")
+{
+    SECTION("map deletion of sorted items")
+    {
+        RedBlackTree<int> rbt;
+        std::map<int,int> std_map;
+
+        // insert the same number of item in stl map and rbtree
+        for(int i=0;i<100000;i++){   rbt.add(i); }
+        for(int i=0;i<100000;i++){ std_map[i] = i; }
+
+        // deletion time taken by rbt
+        auto insert_time_rbt = std::chrono::high_resolution_clock::now();
+        for(int i=0;i<100000;i++){   rbt.remove(i); }
+        auto finish_insert_time_rbt = std::chrono::high_resolution_clock::now();
+
+        // deletion time taken by stl map
+        auto insert_time_map = std::chrono::high_resolution_clock::now();
+        for(int i=0;i<100000;i++){ std_map.erase(i); }
+        auto finish_insert_time_map = std::chrono::high_resolution_clock::now();
+
+        std::cout << "Deletion Benchmark For Sorted Numbers\n";
+        std::cout << "####################\n";
+        auto map_duration = std::chrono::duration_cast<std::chrono::milliseconds>
+                (finish_insert_time_map - insert_time_map).count();
+        std::cout<<"Deletion Time for map =  " << map_duration << std::endl;
+
+        auto rbt_duration = std::chrono::duration_cast<std::chrono::milliseconds>
+                (finish_insert_time_rbt - insert_time_rbt).count();
+        std::cout << "Deletion Time for rbTree =  " << rbt_duration << std::endl;
+
+    }
+    SECTION("map deletion of sorted items")
+    {
+        RedBlackTree<int> rbt;
+        std::map<int,int> std_map;
+
+        // insert the same number of item in stl map and rbtree
+        std::srand(time(NULL));
+        std::vector<int> rnd_nums;
+        for(int i=0;i<100000;i++){ rnd_nums.push_back(rand()%100000); }
+        for(auto& c : rnd_nums){ std_map[c] = c; rbt.add(c);}
+
+
+        // deletion time taken by rbt
+        auto delete_time_rbt = std::chrono::high_resolution_clock::now();
+        for(auto& c : rnd_nums){   rbt.remove(c); }
+        auto finish_delete_time_rbt = std::chrono::high_resolution_clock::now();
+
+        // deletion time taken by stl map
+        auto delete_time_map = std::chrono::high_resolution_clock::now();
+        for(auto& c : rnd_nums){ std_map.erase(c); }
+        auto finish_delete_time_map = std::chrono::high_resolution_clock::now();
+
+        std::cout << "Deletion Benchmark For UnSorted Numbers\n";
+        std::cout << "####################\n";
+        auto map_duration = std::chrono::duration_cast<std::chrono::milliseconds>
+                (finish_delete_time_map - delete_time_map).count();
+        std::cout<<"Deletion Time for map =  " << map_duration << std::endl;
+
+        auto rbt_duration = std::chrono::duration_cast<std::chrono::milliseconds>
+                (finish_delete_time_rbt - delete_time_rbt).count();
+        std::cout << "Deletion Time for rbTree =  " << rbt_duration << std::endl;
+
+    }
+}
+
+
