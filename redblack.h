@@ -63,6 +63,11 @@ private:
     void rb_transplant(Node<T>*, Node<T>*);
     void delete_leave(Node<T>*&, Node<T>*&, bool&);
     void print(Node<T>*);
+
+    // Test Functions
+    bool two_adjacent_red(Node<T>*);
+    void get_color(Node<T> *ptr,std::vector<Color>&);
+
 public:
     RedBlackTree();
     // Add
@@ -72,16 +77,19 @@ public:
     template < template < class ... > class Container, class ... Args >
     std::vector<bool> add(const Container<T,Args...>&);
     ~RedBlackTree();
+
     // Remove
     void remove(T&&);
     void remove(T&);
     template < template < class ... > class Container, class ... Args >
     void remove(const Container<T,Args...>&);
+
     // Search
     bool search(T&&);
     bool search(T&);
     template < template < class ... > class Container, class ... Args >
     std::vector<bool> search(const Container<T,Args...>&);
+
     //print the red black tree in ascending order
     void print();
     int size_rbt();
@@ -89,6 +97,10 @@ public:
     void get_elements(Node<T>*,std::vector<T>&);
     void clean_tree(Node<T>*);
 
+    // test functions
+    bool root_black();
+    bool two_adjacent_red();
+    bool height_black();
 };
 
 

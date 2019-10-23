@@ -99,7 +99,7 @@ TEST_CASE("rotations")
         std::vector<int> v = {1,4,3,2};
         RedBlackTree<int> red_black_tree;
         red_black_tree.add(v);
-        std::vector<int> vb = {1,2,3,4};
+        std::vector<int> vb = {3,1,2,4};
         CHECK(red_black_tree.check_element_order(vb));
 
     }
@@ -166,6 +166,46 @@ TEST_CASE("Benchmark")
         std::cout<<"Time for rbt =  "<<rbt_duration<<std::endl;
 
     }
+}
+
+
+TEST_CASE("remove function tests")
+{
+    SECTION("tree is empty")
+    {
+        RedBlackTree<int> red_black_tree;
+        red_black_tree.remove(1);
+        CHECK(true);
+
+    }
+    SECTION("add vector")
+    {
+        RedBlackTree<int> red_black_tree;
+        std::vector<int> v={1,2,3,4,5,6,7};
+        std::vector<bool> vb = red_black_tree.add(v);
+        std::vector<bool> correct = {true,true,true,true,true,true,true};
+        CHECK(vb == correct);
+    }
+    SECTION("add dublicate")
+    {
+        RedBlackTree<int> red_black_tree;
+        bool added = red_black_tree.add(4);
+        int temp = 4;
+        bool notAdded = red_black_tree.add(temp);
+        CHECK(added!=notAdded);
+
+    }
+    SECTION("vector dublicates")
+    {
+        std::vector<int> v = {1,4,1,4};
+        std::vector<bool> correct = {true,true,false,false};
+        RedBlackTree<int> red_black_tree;
+        std::vector<bool> vb = red_black_tree.add(v);
+        CHECK(vb==correct);
+
+
+    }
+
 }
 
 

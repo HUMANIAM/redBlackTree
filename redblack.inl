@@ -684,15 +684,17 @@ void RedBlackTree<T>::get_elements(Node<T> *ptr,std::vector<T>& v)
 {
     if(ptr == nullptr)
         return;
-    get_elements(ptr->left,v);
     v.push_back(ptr->element);
+    get_elements(ptr->left,v);
     get_elements(ptr->right,v);
 }
+
 template <class T>
 RedBlackTree<T>::~RedBlackTree<T>()
 {   clean_tree(root);
     root = nullptr;
 }
+
 template <class T>
 void RedBlackTree<T>::clean_tree(Node<T>*node)
 {
@@ -706,3 +708,49 @@ void RedBlackTree<T>::clean_tree(Node<T>*node)
     delete node;
 
 }
+
+// test functions
+template <class T>
+bool RedBlackTree<T>::root_black(){
+    return (root == nullptr) || (root->color == BLACK);
+}
+
+template <class T>
+bool RedBlackTree<T>::two_adjacent_red(){
+    vector<Color> vcolors;
+    get_color(root, vcolors);
+
+    // check no two adjacent nodes are red
+    for(size_t i = 0; vcolors.size()-1; i++){
+        if((vcolors[i] == RED) && (vcolors[i+1] == RED)){
+            return true;
+        }
+    }
+    return false;
+}
+
+template <class T>
+bool RedBlackTree<T>::height_black(){
+
+}
+
+template <class T>
+void RedBlackTree<T>::get_color(Node<T> *ptr,std::vector<Color>& v)
+{
+    if(ptr == nullptr)
+        return;
+    get_elements(ptr->left,v);
+    v.push_back(ptr->color);
+    get_elements(ptr->right,v);
+}
+
+
+
+
+
+
+
+
+
+
+
