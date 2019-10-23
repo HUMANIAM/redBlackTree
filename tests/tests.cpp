@@ -3,6 +3,7 @@
 #define TEST true
 #include <catch.hpp>
 #include <chrono>
+#include <time.h>
 int main()
 {
     //If the TEST macro is defined to be true,
@@ -176,7 +177,7 @@ TEST_CASE("rotations")
     }
 }
 
-TEST_CASE("Benchmark")
+TEST_CASE("Insertion Benchmark")
 {
     SECTION("map insert sorted")
     {
@@ -254,7 +255,7 @@ TEST_CASE("remove function tests")
     SECTION("remove list of elements")
     {
         RedBlackTree<int> rbt;
-        vector<int> t = {1, 2, 3, 4, 5, 6, 7};
+        std::vector<int> t = {1, 2, 3, 4, 5, 6, 7};
         rbt.add(t);
         rbt.remove(t);
 
@@ -265,8 +266,8 @@ TEST_CASE("remove function tests")
     SECTION("remove list of non-exist elements")
     {
         RedBlackTree<int> rbt;
-        vector<int> t = {1, 2, 3, 4, 5, 6, 7};
-        vector<int> tt = {10, 20, 30, 40};
+        std::vector<int> t = {1, 2, 3, 4, 5, 6, 7};
+        std::vector<int> tt = {10, 20, 30, 40};
         rbt.add(t);
         rbt.remove(tt);
 
@@ -277,7 +278,8 @@ TEST_CASE("remove function tests")
     {
         // add random values
         RedBlackTree<int> rbt;
-        for(int i=0;i<150;i++)
+
+        for(int i=0;i<10000000;i++)
         {
             rbt.add(rand()%100000);
         }
@@ -288,11 +290,10 @@ TEST_CASE("remove function tests")
             rbt.remove(rand()%100000);
         }
 
+
         // check properties of rbtree aren't broken
-        bool b1 = rbt.root_black() ;
-        bool b2 =!rbt.two_adjacent_red() ;
-        bool b3 = rbt.height_black();
-        bool x = b1 && b2 && b3;
+        bool x = rbt.root_black() && !rbt.two_adjacent_red() && rbt.height_black();
+
         CHECK(x);
     }
 

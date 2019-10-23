@@ -105,6 +105,7 @@ public:
     void get_elements(Node<T>*,std::vector<T>&);
     void clean_tree(Node<T>*);
 
+    bool is_empty();
     // test functions
     bool root_black();
     bool two_adjacent_red();

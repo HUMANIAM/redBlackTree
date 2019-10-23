@@ -1,14 +1,17 @@
 #include "redblack.h"
 #include <string.h>
 
-///////////////////////
-//////////////////////////
 
 // initialize init functions
 template<typename T>
 RedBlackTree<T>::RedBlackTree()
 {
     root=nullptr;
+}
+
+template<typename T>
+Node<T>::Node(){
+
 }
 
 template<typename T>
@@ -21,6 +24,11 @@ template<typename T>
 Node<T>::Node(T& element)
 {
     this->element = element;
+}
+
+template <typename T>
+bool RedBlackTree<T>::is_empty(){
+    return root == nullptr;
 }
 
 template <typename T>
@@ -329,7 +337,7 @@ void RedBlackTree<T>::print(Node<T>*current)
 
 
 /////////////////////////////////////////////// Remove Node From RBTree  ///////////////////
-using namespace std;
+
 template <typename T>
 void RedBlackTree<T>::remove(T&& element){
     Node<T>* node_addr = search_util(std::move(element), root);
@@ -734,6 +742,7 @@ bool RedBlackTree<T>::two_adjacent_red(Node<T>* current)
     bool right_red = (current->right != nullptr && current->right->color == RED);
     if((current->color == RED) && right_red){ return true; }
 
+
     return  two_adjacent_red(current->right) || two_adjacent_red(current->left);
 }
 
@@ -742,21 +751,21 @@ std::pair<int,bool> RedBlackTree<T>::height_black(Node<T>*node)
 {
     if(node==nullptr)
     {
-        return make_pair(0,true);
+        return std::make_pair(0,true);
     }
     std::pair<int,bool> left = height_black(node->left);
     if(!left.second)
-        return make_pair(-1,false);
+        return std::make_pair(-1,false);
     std::pair<int,bool> right = height_black(node->right);
     if(!right.second)
-        return make_pair(-1,false);
+        return std::make_pair(-1,false);
     if(right.first == left.first)
     {
         if(node->color==BLACK)
-            return make_pair(left.first+1,true);
-        return make_pair(left.first,true);
+            return std::make_pair(left.first+1,true);
+        return std::make_pair(left.first,true);
     }
-    return make_pair(-1,false);
+    return std::make_pair(-1,false);
 
 }
 
