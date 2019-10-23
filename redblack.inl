@@ -181,81 +181,127 @@ std::vector<bool> RedBlackTree<T>::search(const Container<T,Args...>& list)
 template <class T>
 void RedBlackTree<T>::check_tree(Node<T> * current)
 {
-    while ( (current != root) && (current->parent->color == RED) ) {
-        if ( current->parent == current->parent->parent->left ) {
-            /* If current's parent is a left, temp is current's right 'uncle' */
-            left(current);
-        }
-        else {
-            /* repeat the "if" part with right and left
-                  ecurrentchanged */
-            right(current);
-        }
-    }
-    /* color the root black */
-    root->color = BLACK;
+    insert_case1(current);
 
+}
+template <class T>
+void RedBlackTree<T>::insert_case1(Node<T>* n)
+{
+    if (n->parent == NULL)
+        n->color = BLACK;
+    else
+        insert_case2(n);
+}
+template <class T>
+Color RedBlackTree<T>::node_color(Node<T>* n)
+{
+    return n == NULL ? BLACK : n->color;
 }
 
 
 template <class T>
-void RedBlackTree<T>::left(Node<T>*current)
+void RedBlackTree<T>::insert_case2(Node<T>* n)
 {
-    Node<T> * temp;
-    temp = current->parent->parent->right;
-
-    if (temp!=nullptr && temp->color == RED ) {
-        /* case 1 - change the colors */
-        current->parent->color = BLACK;
-        temp->color = BLACK;
-        current->parent->parent->color = RED;
-        /* Move current up the tree */
-        current = current->parent->parent;
+    if (node_color(n->parent) == BLACK)
+        return;
+    else
+        insert_case3(n);
+}
+template <class T>
+void RedBlackTree<T>::insert_case3(Node<T>* n)
+{
+    if (node_color(uncle(n)) == RED)
+    {
+        n->parent->color = BLACK;
+        uncle(n)->color = BLACK;
+        grandparent(n)->color = RED;
+        insert_case1(grandparent(n));
     }
-    else {
-        /* temp is a black node */
-        if ( current == current->parent->right ) {
-            /* and current is to the right */
-            /* case 2 - move current up and rotate */
-            current = current->parent;
-            left_rotate( current );
-        }
-
-        /* case 3 */
-        current->parent->color = BLACK;
-        current->parent->parent->color = RED;
-        right_rotate(current->parent->parent );
+    else
+    {
+        insert_case4(n);
     }
+}
+template <class T>
+void RedBlackTree<T>::insert_case4(Node<T>*n)
+{
+    if (n == n->parent->right && n->parent == grandparent(n)->left)
+    {
+        rotate_left( n->parent);
+        n = n->left;
+    }
+    else if (n == n->parent->left && n->parent == grandparent(n)->right)
+    {
+        rotate_right(n->parent);
+        n = n->right;
+    }
+    insert_case5(n);
+}
 
+template <class T>
+void RedBlackTree<T>::insert_case5(Node<T>* n)
+{
+    n->parent->color = BLACK;
+    grandparent(n)->color = RED;
+    if (n == n->parent->left && n->parent == grandparent(n)->left)
+    {
+        rotate_right(grandparent(n));
+    }
+    else
+    {
+        if(n == n->parent->right && n->parent == grandparent(n)->right)
+            rotate_left(grandparent(n));
+    }
 }
 
 
 template <class T>
-void RedBlackTree<T>::right(Node<T>*current)
+void RedBlackTree<T>::rotate_left(Node<T>* n)
 {
-    Node<T> *temp;
-    temp = current->parent->parent->left;
-
-    if (temp!=nullptr && temp->color == RED ) {
-        /* case 1 - change the colors */
-        current->parent->color = BLACK;
-        temp->color = BLACK;
-        current->parent->parent->color = RED;
-        /* Move current up the tree */
-        current = current->parent->parent;
+    Node<T>* r = n->right;
+    replace_node(n, r);
+    n->right = r->left;
+    if (r->left != NULL)
+    {
+        r->left->parent = n;
     }
-    else {
-        /* temp is a black node */
-        if ( current == current->parent->left ) {
-            /* and current is to the left */
-            /* case 2 - move current up and rotate */
-            current = current->parent;
-            right_rotate( current );
-        }
-        /* case 3 */
-        current->parent->color = BLACK;
-        current->parent->parent->color = RED;
-        left_rotate(current->parent->parent);
+    r->left = n;
+    n->parent = r;
+}
+
+
+
+template<class T>
+void RedBlackTree<T>::rotate_right(Node<T>* n)
+{
+    Node<T>* L = n->left;
+    replace_node(n, L);
+    n->left = L->right;
+    if (L->right != NULL)
+    {
+        L->right->parent = n;
+    }
+    L->right = n;
+    n->parent = L;
+}
+
+template  <class T>
+void RedBlackTree<T>::replace_node(Node<T>* oldn,Node<T>* newn)
+{
+    if (oldn->parent == NULL)
+    {
+        root = newn;
+    }
+    else
+    {
+        if (oldn == oldn->parent->left)
+            oldn->parent->left = newn;
+        else
+            oldn->parent->right = newn;
+    }
+    if (newn != NULL)
+    {
+        newn->parent = oldn->parent;
     }
 }
 
@@ -280,56 +326,7 @@ void RedBlackTree<T>::print(Node<T>*current)
 
 }
 
-template <class T>
-void RedBlackTree<T>::left_rotate(Node<T> *current ) {
-    Node<T> *temp;
-    temp = current->right;
-    /* Turn temp's left sub-tree into x's right sub-tree */
-    current->right = temp->left;
-    if ( temp->left != nullptr )
-        temp->left->parent = current;
-    /* temp's new parent was x's parent */
-    temp->parent = current->parent;
-    /* Set the parent to point to temp instead of x */
-    /* First see whether we're at the root */
-    if ( current->parent == nullptr ) root = temp;
-    else
-        if ( current == current->parent->left )
-            /* x was on the left of its parent */
-            current->parent->left = temp;
-        else
-            /* x must have been on the right */
-            current->parent->right = temp;
-    /* Finalltemp, put x on temp's left */
-    temp->left = current;
-    current->parent = temp;
-}
 
-template <class T>
-void RedBlackTree<T>::right_rotate(Node<T> *current ) {
-    Node<T> *temp;
-    temp = current->left;
-    /* Turn temp's right sub-tree into x's left sub-tree */
-    current->left = temp->right;
-    if ( temp->right != nullptr )
-        temp->right->parent = current;
-    /* temp's new parent was x's parent */
-    temp->parent = current->parent;
-    /* Set the parent to point to temp instead of x */
-    /* First see whether we're at the root */
-    if ( current->parent == nullptr ) root = temp;
-    else
-        if ( current == current->parent->right )
-            /* x was on the right of its parent */
-            current->parent->right = temp;
-        else
-            /* x must have been on the right */
-            current->parent->left = temp;
-    /* Finally, put x on temp's right */
-    temp->right = current;
-    current->parent = temp;
-
-}
 
 /////////////////////////////////////////////// Remove Node From RBTree  ///////////////////
 using namespace std;
@@ -423,8 +420,8 @@ void RedBlackTree<T>::remove_util(Node<T>* node_d){
 
             if(temp_has_children)
                 delete node_d;
-        } 
-}
+        }
+    }
 
     // check properties of rbTree aren't broken
     if(temp_color == BLACK){
@@ -438,15 +435,15 @@ void RedBlackTree<T>::rb_remove_fixup(Node<T>* node_x, bool delete_x){
     Node<T>* node_x_t = node_x;
     while(node_x != root && node_x->color == BLACK){
 
-       if(node_x == node_x->parent->left){
-           rb_remove_fixup_left(node_x);
-       }else
-       {
-           rb_remove_fixup_right(node_x);
-       }
+        if(node_x == node_x->parent->left){
+            rb_remove_fixup_left(node_x);
+        }else
+        {
+            rb_remove_fixup_right(node_x);
+        }
     }
 
-     node_x->color = BLACK;
+    node_x->color = BLACK;
 
     // if node_x is dummy node delete
     if(delete_x){
@@ -459,7 +456,7 @@ template <class T>
 Node<T>* RedBlackTree<T>::remove_fixup_left_case1(Node<T>* sibling_w, Node<T>* node_x){
     sibling_w->color = BLACK;
     node_x->parent->color = RED;
-    left_rotate(node_x->parent);
+    rotate_left(node_x->parent);
     return node_x->parent->right;
 }
 
@@ -478,7 +475,7 @@ Node<T>* RedBlackTree<T>::remove_fixup_left_case3(Node<T>* sibling_w, Node<T>* n
     }
 
     sibling_w->color = RED;
-    right_rotate(sibling_w);
+    rotate_right(sibling_w);
 
     return node_x->parent->right;
 }
@@ -493,7 +490,7 @@ Node<T>* RedBlackTree<T>::remove_fixup_left_case4(Node<T>* sibling_w, Node<T>* n
         sibling_w->right->color = BLACK;
     }
 
-    left_rotate(node_x->parent);
+    rotate_left(node_x->parent);
     return root;
 }
 
@@ -518,7 +515,7 @@ void RedBlackTree<T>::rb_remove_fixup_left(Node<T>*& node_x){
         node_x = remove_fixup_left_case2(sibling_w, node_x);
 
     }else if(w_right_black){
-       // case 3
+        // case 3
         sibling_w = remove_fixup_left_case3(sibling_w, node_x);
 
     }else{
@@ -532,7 +529,7 @@ template <class T>
 Node<T>* RedBlackTree<T>::remove_fixup_right_case1(Node<T>* sibling_w, Node<T>* node_x){
     sibling_w->color = BLACK;
     node_x->parent->color = RED;
-    right_rotate(node_x->parent);
+    rotate_right(node_x->parent);
     return node_x->parent->left;
 }
 
@@ -551,7 +548,7 @@ Node<T>* RedBlackTree<T>::remove_fixup_right_case3(Node<T>* sibling_w, Node<T>* 
     }
 
     sibling_w->color = RED;
-   left_rotate(sibling_w);
+    rotate_left(sibling_w);
 
     return node_x->parent->left;
 }
@@ -566,7 +563,7 @@ Node<T>* RedBlackTree<T>::remove_fixup_right_case4(Node<T>* sibling_w, Node<T>* 
         sibling_w->left->color = BLACK;
     }
 
-    right_rotate(node_x->parent);
+    rotate_right(node_x->parent);
     return root;
 }
 
@@ -591,7 +588,7 @@ void RedBlackTree<T>::rb_remove_fixup_right(Node<T>*& node_x){
         node_x = remove_fixup_right_case2(sibling_w, node_x);
 
     }else if(w_left_black){
-       // case 3
+        // case 3
         sibling_w = remove_fixup_right_case3(sibling_w, node_x);
 
     }else{
@@ -723,7 +720,7 @@ bool RedBlackTree<T>::two_adjacent_red(){
 
 template <class T>
 bool RedBlackTree<T>::height_black(){
-       return height_black(root).second;
+    return height_black(root).second;
 }
 
 template <class T>
@@ -731,11 +728,13 @@ bool RedBlackTree<T>::two_adjacent_red(Node<T>* current)
 {
     if(current == nullptr){return false;}
 
-    bool left_tree = two_adjacent_red(current->left);
-    if(left_tree){return true;}
+    bool left_red = (current->left != nullptr && current->left->color == RED);
+    if((current->color == RED) && left_red){ return true; }
 
-    bool right_tree = two_adjacent_red(current->right);
-    return  left_tree || right_tree;
+    bool right_red = (current->right != nullptr && current->right->color == RED);
+    if((current->color == RED) && right_red){ return true; }
+
+    return  two_adjacent_red(current->right) || two_adjacent_red(current->left);
 }
 
 template <class T>
@@ -761,6 +760,32 @@ std::pair<int,bool> RedBlackTree<T>::height_black(Node<T>*node)
 
 }
 
+template <class T>
+Node<T>* RedBlackTree<T>::grandparent(Node<T>* n)
+{
+    if(n!=NULL && n->parent!=NULL &&n->parent->parent!=NULL)
+        return n->parent->parent;
+    return NULL;
+}
+
+template<class T>
+Node<T>* RedBlackTree<T>::sibling(Node<T>* n)
+{
+    if (n!=NULL && n->parent!=NULL && n == n->parent->left)
+        return n->parent->right;
+    else if(n!=NULL && n->parent!=NULL)
+        return n->parent->left;
+
+    return NULL;
+
+}
+template <class T>
+Node<T>* RedBlackTree<T>::uncle(Node<T>* n)
+{
+    if(n!=NULL && n->parent!=NULL && n->parent->parent!=NULL)
+        return sibling(n->parent);
+    return NULL;
+}
 
 
 

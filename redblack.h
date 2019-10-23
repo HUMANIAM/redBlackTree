@@ -29,15 +29,23 @@ private:
     int size_rb = 0;
     bool add(T&& , Node<T>*);
     bool add(T& , Node<T>*);
-    void right(Node<T>*);
-    void left(Node<T>*);
     Node<T>* search_util(T&&, Node<T>*);
 
     // Utility functions
-    void left_rotate(Node<T>*);
-    void right_rotate(Node<T>*);
     Node<T>* min_node(Node<T>*);
     void check_tree(Node<T>*);
+    void rotate_left(Node<T>*);
+    void rotate_right(Node<T>*);
+    void insert_case1(Node<T>*);
+    void insert_case2(Node<T>*);
+    void insert_case3(Node<T>*);
+    void insert_case4(Node<T>*);
+    void insert_case5(Node<T>*);
+    Color node_color(Node<T>*);
+    Node<T>* grandparent(Node<T>* n);
+    Node<T>* sibling(Node<T>* n);
+    Node<T>* uncle(Node<T>* n);
+    void replace_node(Node<T>* oldn,Node<T>* newn);
 
     //**** Fuctions used when fix the tree after deletion ****///
     void remove_util(Node<T>*);

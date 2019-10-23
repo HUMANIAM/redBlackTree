@@ -16,6 +16,7 @@ int main()
     }
 
     //start working on other parts of your project here.
+
     return 0;
 }
 
@@ -209,13 +210,13 @@ TEST_CASE("Benchmark")
         RedBlackTree<int> red_black_tree;
         std::map<int,int> std_map;
         auto insert_time_rbt = std::chrono::high_resolution_clock::now();
-        for(int i=0;i<100000;i++)
+        for(int i=0;i<1000000;i++)
         {
-            red_black_tree.add(rand()%100000);
+            red_black_tree.add(rand()%1000000);
         }
         auto finish_insert_time_rbt = std::chrono::high_resolution_clock::now();
         auto insert_time_map = std::chrono::high_resolution_clock::now();
-        for(int i=0;i<100000;i++)
+        for(int i=0;i<1000000;i++)
         {
             std_map[i] = rand()%100000;
         }
@@ -229,8 +230,6 @@ TEST_CASE("Benchmark")
 
     }
 }
-
-
 
 TEST_CASE("remove function tests")
 {
@@ -274,5 +273,28 @@ TEST_CASE("remove function tests")
         bool x = rbt.root_black() && !rbt.two_adjacent_red() && rbt.height_black();
         CHECK(x);
     }
+    SECTION("remove random values")
+    {
+        // add random values
+        RedBlackTree<int> rbt;
+        for(int i=0;i<150;i++)
+        {
+            rbt.add(rand()%100000);
+        }
+
+        // remove random values
+        for(int i=0;i<1000000;i++)
+        {
+            rbt.remove(rand()%100000);
+        }
+
+        // check properties of rbtree aren't broken
+        bool b1 = rbt.root_black() ;
+        bool b2 =!rbt.two_adjacent_red() ;
+        bool b3 = rbt.height_black();
+        bool x = b1 && b2 && b3;
+        CHECK(x);
+    }
 
 }
+
