@@ -67,6 +67,7 @@ private:
     // Test Functions
     bool two_adjacent_red(Node<T>*);
     void get_color(Node<T> *ptr,std::vector<Color>&);
+    std::pair<int,bool> height_black(Node<T>*);
 
 public:
     RedBlackTree();
