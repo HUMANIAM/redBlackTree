@@ -11,7 +11,7 @@
 
 const int items = 100;
 const int Max_Rondom = 1e9;
-static Test test(items);
+static Benchmark test(items);
 
 int main()
 {
@@ -105,7 +105,7 @@ TEST_CASE("add function tests")
 
 TEST_CASE("search functions tests")
 {
-    SECTION("Integer search single item exists")
+    SECTION("Integer search singleTest item exists")
     {   RedBlackTree<int> red_black_tree;
         red_black_tree.add(4);
         CHECK(red_black_tree.search(4)==true);
