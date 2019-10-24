@@ -49,7 +49,7 @@ TEST_CASE("add function tests")
         RedBlackTree<int> red_black_tree;
         bool added = red_black_tree.add(4);
         int temp = 4;
-        bool notAdded = red_black_tree.add(temp);
+        bool notAdded =red_black_tree.add(temp);
         CHECK(added!=notAdded);
 
     }
@@ -293,12 +293,14 @@ TEST_CASE("Insertion Benchmark")
         std::map<int,int> std_map;
         auto insert_time_rbt = std::chrono::high_resolution_clock::now();
         for(int i=0;i<items;i++)
+
         {
             red_black_tree.add(rand()%1000000);
         }
         auto finish_insert_time_rbt = std::chrono::high_resolution_clock::now();
         auto insert_time_map = std::chrono::high_resolution_clock::now();
         for(int i=0;i<items;i++)
+
         {
             std_map[i] = rand()%100000;
         }
@@ -339,9 +341,10 @@ TEST_CASE("deletion Benchmark")
 
         // deletion time taken by stl map
         auto insert_time_map = std::chrono::high_resolution_clock::now();
+
         for(int i=0;i<items;i++){ std_map.erase(i); }
         auto finish_insert_time_map = std::chrono::high_resolution_clock::now();
-\
+        \
         std::cout << "\n          #####################################\n";
         std::cout << "          Deletion Benchmark For Sorted Numbers\n";
         std::cout << "          #####################################\n";
