@@ -21,7 +21,6 @@ int main()
     }
 
     //start working on other parts of your project here.
-
     return 0;
 }
 
@@ -225,7 +224,7 @@ TEST_CASE("remove function tests")
     }
     SECTION("remove random values")
     {
-         const int items = 100000000;
+        const int items = 100000000;
         // add random values
         RedBlackTree<int> rbt;
 
@@ -254,7 +253,7 @@ TEST_CASE("Insertion Benchmark")
 {
     SECTION("map insert sorted")
     {
-         const int items = 100000000;
+        const int items = 100000000;
         RedBlackTree<int> red_black_tree;
         std::map<int,int> std_map;
         auto insert_time_rbt = std::chrono::high_resolution_clock::now();
@@ -284,7 +283,7 @@ TEST_CASE("Insertion Benchmark")
     }
     SECTION("map insert unsorted")
     {
-         const int items = 100000000;
+        const int items = 100000000;
         std::srand(2);
         RedBlackTree<int> red_black_tree;
         std::map<int,int> std_map;
@@ -361,7 +360,7 @@ TEST_CASE("deletion Benchmark")
         std::map<int,int> std_map;
 
         // insert the same number of item in stl map and rbtree
-        std::srand(time(NULL));
+        std::srand(time(0));
         std::vector<int> rnd_nums;
         for(int i=0;i<items;i++){ rnd_nums.push_back(rand()%items); }
         for(auto& c : rnd_nums){ std_map[c] = c; rbt.add(c);}

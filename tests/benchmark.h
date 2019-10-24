@@ -5,9 +5,60 @@
 #include <string>
 #include <map>
 using namespace std;
-
+#define PRINT_DASHES 61
 // project headers
 #include "../redblack.h"
+void get_spaces(int num,int& limit)
+{
+    while(num>=10)
+    {
+        num/=10;
+        limit--;
+
+    }
+
+}
+void print_headers()
+{
+    for(int i=0;i<PRINT_DASHES;i++)
+        cout<<"#";
+    cout<<endl;
+    cout<<"Numbers |";
+    cout<<" stl_insert |";
+    cout<<" rbt_insert |";
+    cout<<" stl_delete |";
+    cout<<" rbt_delete |";
+    cout<<endl;
+    for(int i=0;i<PRINT_DASHES;i++)
+        cout<<"#";
+    cout<<endl;
+}
+void print(int test_size,vector<long> v)
+{    int limit;
+     int size;
+      limit=8;
+       cout<<test_size;
+        size = to_string(test_size).length();
+
+         for(int j=0;j<limit - size;j++)
+             cout<<" ";
+          cout<<"|";
+
+          for(uint i = 0 ; i < 4 ; i++ )
+          {   limit=10;
+              cout<<" "<<v[i];
+              size = to_string(v[i]).length();
+              for(int j=0;j<limit - size;j++)
+                  cout<<" ";
+              cout<<" |";
+          }
+           cout<<endl;
+           for(int i=0;i<PRINT_DASHES;i++)
+               cout<<"#";
+            cout<<endl;
+}
+///////////////////////////////////////////////////////
+
 
 template <typename Duration>
 auto duration_time(Duration const& duration) {
@@ -26,7 +77,7 @@ class Test{
     template<typename T>
     long insert_rbTree(const std::vector<T>&, RedBlackTree<T>);
 
-    public:
+public:
     Test (int items):items(items){}
 
     // test for lvalue objects that has expensive cost of copy like strings, containers, larger user-defined objs
