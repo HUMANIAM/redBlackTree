@@ -6,9 +6,9 @@ SOURCES += \
         tests/tests.cpp
 
 HEADERS += \
+    benchmark.h \
     redblack.h \
-    redblack.inl \
-    tests/benchmark.h
+    redblack.inl
 
 INCLUDEPATH += /opt/rdi/include
 QMAKE_CXXFLAGS += -std=c++17

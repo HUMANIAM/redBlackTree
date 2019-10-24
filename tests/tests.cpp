@@ -6,74 +6,9 @@
 #include <string>
 
 // project headers
-#include "benchmark.h"
+#include "../benchmark.h"
 #include "../redblack.h"
 
-const int max_items = 1e7;
-const int max_Rondom = 1e7;
-static Benchmark benchmark(max_items);
-
-///  ####### Benchmark for insertion and deletion of our RB tree agains STL Map (implemented using RB Tree also)
-vector<int> get_sorted_integers(int sz){
-    vector<int> elements;
-    for(int i=0; i < sz; i++) { elements.push_back(i);}
-    return elements;
-}
-
-vector<int> get_unsorted_integers(int sz){
-    vector<int> elements;
-    for(int i=0; i < sz; i++) { elements.push_back(rand() % max_Rondom);}
-    return elements;
-}
-
-vector<string> get_sorted_strings(int sz){
-    vector<string> elements;
-    for(int i=0; i < sz; i++) { elements.push_back(to_string(i));}
-    return elements;
-}
-
-vector<string> get_unsorted_strings(int sz){
-    vector<string> elements;
-    for(int i=0; i < sz; i++) { elements.push_back(to_string(rand() % max_Rondom));}
-    return elements;
-}
-
-// Deletion and insertin of primitive values like int, float, ...
-void primitive_benchmark(){
-    print_headers("Integers (primitive type) in sorted order");
-
-    for(int citem = 100; citem <= max_items; citem *= 10){
-        vector<long> results = benchmark.test_all_lvalue_objects(get_sorted_integers(citem));
-        print_results(citem, results);
-    }
-    cout << "\n\n\n";
-
-    print_headers("Integers (primitive type) in unsorted order");
-
-    for(int citem = 100; citem <= max_items; citem *= 10){
-        vector<long> results = benchmark.test_all_lvalue_objects(get_unsorted_integers(citem));
-        print_results(citem, results);
-    }
-    cout << "\n\n\n";
-
-}
-
-// Deletion and insertion of lvalue objects has expensive copy operation like vectors, strings, user-defined objects
-void lvalue_benchmark(){
-    print_headers("Strings passed as lvalue");
-
-}
-
-// Deletion and insertion of lvalue objects has expensive copy operation like vectors, strings, user-defined objects
-void rvalue_benchmark(){
-
-}
-
-void run_benchmark(){
-    primitive_benchmark();
-}
-
-///  ####### Benchmark for insertion and deletion of expensive copy objects
 
 int main()
 {
@@ -84,9 +19,7 @@ int main()
     //to skip tests and run the rest of your code.
     if (TEST)
     {
-        return Catch::Session().run();const int items = 100000000;
-        RedBlackTree<int> red_black_tree;
-        std::map<int,int> stl_map;
+        return Catch::Session().run();
     }
 
     // run benchmark after passing
