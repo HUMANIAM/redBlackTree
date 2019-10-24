@@ -1,5 +1,5 @@
 #define CATCH_CONFIG_RUNNER
-#define TEST true
+#define TEST false
 #include <catch.hpp>
 #include <chrono>
 #include <time.h>
@@ -9,9 +9,71 @@
 #include "benchmark.h"
 #include "../redblack.h"
 
-const int items = 100;
-const int Max_Rondom = 1e9;
-static Benchmark test(items);
+const int max_items = 1e7;
+const int max_Rondom = 1e7;
+static Benchmark benchmark(max_items);
+
+///  ####### Benchmark for insertion and deletion of our RB tree agains STL Map (implemented using RB Tree also)
+vector<int> get_sorted_integers(int sz){
+    vector<int> elements;
+    for(int i=0; i < sz; i++) { elements.push_back(i);}
+    return elements;
+}
+
+vector<int> get_unsorted_integers(int sz){
+    vector<int> elements;
+    for(int i=0; i < sz; i++) { elements.push_back(rand() % max_Rondom);}
+    return elements;
+}
+
+vector<string> get_sorted_strings(int sz){
+    vector<string> elements;
+    for(int i=0; i < sz; i++) { elements.push_back(to_string(i));}
+    return elements;
+}
+
+vector<string> get_unsorted_strings(int sz){
+    vector<string> elements;
+    for(int i=0; i < sz; i++) { elements.push_back(to_string(rand() % max_Rondom));}
+    return elements;
+}
+
+// Deletion and insertin of primitive values like int, float, ...
+void primitive_benchmark(){
+    print_headers("Integers (primitive type) in sorted order");
+
+    for(int citem = 100; citem <= max_items; citem *= 10){
+        vector<long> results = benchmark.test_all_lvalue_objects(get_sorted_integers(citem));
+        print_results(citem, results);
+    }
+    cout << "\n\n\n";
+
+    print_headers("Integers (primitive type) in unsorted order");
+
+    for(int citem = 100; citem <= max_items; citem *= 10){
+        vector<long> results = benchmark.test_all_lvalue_objects(get_unsorted_integers(citem));
+        print_results(citem, results);
+    }
+    cout << "\n\n\n";
+
+}
+
+// Deletion and insertion of lvalue objects has expensive copy operation like vectors, strings, user-defined objects
+void lvalue_benchmark(){
+    print_headers("Strings passed as lvalue");
+
+}
+
+// Deletion and insertion of lvalue objects has expensive copy operation like vectors, strings, user-defined objects
+void rvalue_benchmark(){
+
+}
+
+void run_benchmark(){
+    primitive_benchmark();
+}
+
+///  ####### Benchmark for insertion and deletion of expensive copy objects
 
 int main()
 {
@@ -22,9 +84,13 @@ int main()
     //to skip tests and run the rest of your code.
     if (TEST)
     {
-        return Catch::Session().run();
+        return Catch::Session().run();const int items = 100000000;
+        RedBlackTree<int> red_black_tree;
+        std::map<int,int> stl_map;
     }
 
+    // run benchmark after passing
+    run_benchmark();
     //start working on other parts of your project here.
     return 0;
 }
@@ -43,7 +109,7 @@ TEST_CASE("add function tests")
         RedBlackTree<int> red_black_tree;
         std::vector<int> v={1,2,3,4,5,6,7};
         std::vector<bool> vb = red_black_tree.add(v);
-        std::vector<bool> correct = {true,true,true,true,true,true,true};
+        std::vector<bool> correct = {true,true,true,true,true,true, true};
         CHECK(vb == correct);
     }
     SECTION("Integer add dublicate")
@@ -89,6 +155,8 @@ TEST_CASE("add function tests")
         CHECK(added!=notAdded);
 
     }
+    RedBlackTree<int> red_black_tree;
+    std::map<int,int> stl_map;
     SECTION("String vector dublicates")
     {
         std::vector<std::string> v = {"aa","bb","aa","bb"};
@@ -107,6 +175,7 @@ TEST_CASE("search functions tests")
     SECTION("Integer search singleTest item exists")
     {   RedBlackTree<int> red_black_tree;
         red_black_tree.add(4);
+        std::map<int,int> stl_map;
         CHECK(red_black_tree.search(4)==true);
     }
     SECTION("Integer search single item doesnt exist")
@@ -148,7 +217,8 @@ TEST_CASE("search functions tests")
         CHECK(red_black_tree.search("baba")==false);
     }
     SECTION("String search list of items exists")
-    {   RedBlackTree<std::string> red_black_tree;
+    {
+        RedBlackTree<string> red_black_tree;
         std::vector<std::string> v ={"aba","cacaca"};
         std::vector<bool> vb ={true,true};
         red_black_tree.add(v);
@@ -167,6 +237,8 @@ TEST_CASE("search functions tests")
 TEST_CASE("rotations")
 {
     SECTION("correct rotation")
+    RedBlackTree<int> red_black_tree;
+    std::map<int,int> stl_map;
     {
         std::vector<int> v = {1,4,3,2};
         RedBlackTree<int> red_black_tree;
@@ -233,6 +305,8 @@ TEST_CASE("remove function tests")
         RedBlackTree<int> rbt;
 
         for(int i=0;i<items;i++)
+        RedBlackTree<int> red_black_tree;
+        std::map<int,int> stl_map;
         {
             rbt.add(rand()%100000);
         }
@@ -252,105 +326,7 @@ TEST_CASE("remove function tests")
 
 }
 
-///  ####### Benchmark for insertion and deletion of our RB tree agains STL Map (implemented using RB Tree also)
-TEST_CASE("Insertion Benchmark")
-{
-    SECTION("map insert sorted")
-    {
-        const int items = 100000000;
-        RedBlackTree<int> red_black_tree;
-        std::map<int,int> stl_map;
-        std::vector<int> elements;
 
-        for(int i=0; i<items; i++){elements.push_back(i);}
-
-        // time to insert into redBlack tree and stl_map
-        auto rbt_time      = test.insert_rbTree(elements, red_black_tree);
-        auto stl_map_time  = test.insert_stl_map(elements, stl_map);
-
-        // print results
-
-        std::cout << "\n          #####################################\n";
-        std::cout << "          Insertion Benchmark For Sorted Numbers\n";
-        std::cout << "          #####################################\n";
-        cout << "STL_MAP: " << stl_map_time << endl;
-        cout << "RBTree: "  << rbt_time     << endl;
-
-    }
-    SECTION("map insert unsorted")
-    {
-        const int items = 100000000;
-        std::srand(2);
-        RedBlackTree<int> red_black_tree;
-        std::map<int,int> stl_map;
-        std::vector<int> elements;
-
-        for(int i=0; i<items; i++){elements.push_back(rand() % Max_Rondom);}
-        // time to insert into redBlack tree and stl_map
-        auto rbt_time      = test.insert_rbTree(elements, red_black_tree);
-        auto stl_map_time  = test.insert_stl_map(elements, stl_map);
-
-        std::cout << "\n          #####################################\n";
-        std::cout << "          Insertion Benchmark For Random Numbers\n";
-        std::cout << "          #####################################\n";
-        cout << "STL_MAP: " << stl_map_time << endl;
-        cout << "RBTree: "  << rbt_time     << endl;
-    }
-}
-
-
-//    SECTION("map deletion of sorted items")
-//    {
-
-
-//        RedBlackTree<int> rbt;
-//        std::map<int,int> std_map;
-
-//        // insert the same number of item in stl map and rbtree
-//        std::srand(time(NULL));
-//        std::vector<int> rnd_nums;
-//        for(int i=0;i<items;i++){ rnd_nums.push_back(rand()%items); }
-//        for(auto& c : rnd_nums){ std_map[c] = c; rbt.add(c);}
-
-
-//        // deletion time taken by rbt
-//        auto delete_time_rbt = std::chrono::high_resolution_clock::now();
-//        for(auto& c : rnd_nums){   rbt.remove(c); }
-//        auto finish_delete_time_rbt = std::chrono::high_resolution_clock::now();
-
-//        // deletion time taken by stl map
-//        auto delete_time_map = std::chrono::high_resolution_clock::now();
-//        for(auto& c : rnd_nums){ std_map.erase(c); }
-//        auto finish_delete_time_map = std::chrono::high_resolution_clock::now();
-
-//        std::cout << "\n          #####################################\n";
-//        std::cout << "          Deletion Benchmark For Random Numbers\n";
-//        std::cout << "          #####################################\n";
-//        auto map_duration = std::chrono::duration_cast<std::chrono::milliseconds>
-//                (finish_delete_time_map - delete_time_map).count();
-//        std::cout<<"STL_MAP  =  " << map_duration << std::endl;
-
-//        auto rbt_duration = std::chrono::duration_cast<std::chrono::milliseconds>
-//                (finish_delete_time_rbt - delete_time_rbt).count();
-//        std::cout << "RB_Tree =  " << rbt_duration << std::endl;
-
-//    }
-//}
-
-///////////////////////////////////// Benchmark for expensive copy objects ////////////////////
-
-//TEST_CASE("Expensive copy lvalue objects deletion Benchmark")
-//{
-//    SECTION("deletion of sorted items")
-//    {
-
-//    }
-//    SECTION("map deletion of unsorted items")
-//    {
-
-
-//    }
-//}
 
 
 

@@ -8,22 +8,24 @@ using namespace std;
 #define PRINT_DASHES 61
 // project headers
 #include "../redblack.h"
-void print_headers()
+void print_headers(const string& type)
 {
+    cout << "  Comparison with " << type << endl;
     for(int i=0;i<PRINT_DASHES;i++)
         cout<<"#";
     cout<<endl;
-    cout<<"Numbers |";
+    cout<<"Items   |";
     cout<<" stl_insert |";
     cout<<" rbt_insert |";
     cout<<" stl_delete |";
     cout<<" rbt_delete |";
     cout<<endl;
     for(int i=0;i<PRINT_DASHES;i++)
-        cout<<"#";
+        cout<<"-";
     cout<<endl;
 }
-void print(int test_size,vector<long> v)
+
+void print_results(int test_size,vector<long> v)
 {    int limit;
      int size;
       limit=8;
@@ -62,32 +64,54 @@ class Benchmark{
 public:
     Benchmark (int items):items(items){}
 
-    // insert lvalues
-    template<typename T>
-    long insert_stl_map(const std::vector<T>&, map<T, int>&);
-
-    template<typename T>
-    long insert_rbTree(const std::vector<T>&, RedBlackTree<T>&);
-
     template<typename T>
     vector<long> test_all_lvalue_objects(const vector<T>&);
 
-    // test for lvalue objects that has expensive cost of copy like strings, containers, larger user-defined objs
-    long lvalue_sorted_strings();
-    long lvalue_ranodem_strings();
+    template<typename T>
+    vector<long> test_all_rvalue_objects();
 
-    // test for integer numbers
-    long sorted_integers();
-    long random_integers();
+    // insertion of lvalues
+    template<typename T>
+    long insert_stl_map_lvalue(const std::vector<T>&);
+
+    template<typename T>
+    long insert_rbTree_lvalue(const std::vector<T>&);
+
+    // insert rvalues
+    template<typename T>
+    long insert_stl_map_rvalue(const std::vector<T>&);
+
+    template<typename T>
+    long insert_rbTree_rvalue(const std::vector<T>&);
+
+    // deletion of rvalues
+    template<typename T>
+    long delete_stl_map_lvalue(const std::vector<T>&);
+
+    template<typename T>
+    long delete_rbTree_lvalue(const std::vector<T>&);
+
+    // insert rvalues
+    template<typename T>
+    long delete_stl_map_rvalue(const std::vector<T>&);
+
+    template<typename T>
+    long delete_rbTree_rvalue(const std::vector<T>&);
 };
 
 template<typename T>
 vector<long> Benchmark::test_all_lvalue_objects(const vector<T>& elements){
-   // auto stl_map_insert_time =
+   vector<long> results;
+   results.push_back(insert_stl_map_lvalue(elements));
+   results.push_back(insert_rbTree_lvalue(elements));
+   results.push_back(delete_stl_map_lvalue(elements));
+   results.push_back(delete_rbTree_lvalue(elements));
+   return results;
 }
 
 template <typename T >
-long Benchmark::insert_stl_map(const std::vector<T>& elements, map<T, int>& stl_map){
+long Benchmark::insert_stl_map_lvalue(const std::vector<T>& elements){
+     map<T, int> stl_map;
     auto start_t = std::chrono::high_resolution_clock::now();
     for(auto it : elements){  stl_map[it] = 0;}
     auto end_t = std::chrono::high_resolution_clock::now();
@@ -96,7 +120,8 @@ long Benchmark::insert_stl_map(const std::vector<T>& elements, map<T, int>& stl_
 }
 
 template<typename T>
-long Benchmark::insert_rbTree(const std::vector<T>& elements, RedBlackTree<T>& rbt){
+long Benchmark::insert_rbTree_lvalue(const std::vector<T>& elements){
+    RedBlackTree<T> rbt;
     auto start_t = std::chrono::high_resolution_clock::now();
     for(auto it : elements){  rbt.add(it);}
     auto end_t = std::chrono::high_resolution_clock::now();
@@ -105,50 +130,67 @@ long Benchmark::insert_rbTree(const std::vector<T>& elements, RedBlackTree<T>& r
 }
 
 
-//long Benchmark::lvalue_sorted_strings(){
-//     RedBlackTree<std::string> rbt;
-//     std::map<std::string,int> std_map;
-//     std::vector<std::string> inserted_items;
+template<typename T>
+long insert_stl_map_rvalue(const std::vector<T>& elements){
+    map<T, int> stl_map;
+    auto start_t = std::chrono::high_resolution_clock::now();
+    for(auto it : elements){  stl_map[move(it)] = 0;}
+    auto end_t = std::chrono::high_resolution_clock::now();
 
-//     // insert items in stl_map and rbtree
-//     for(int i=0;i<items;i++){inserted_items.push_back(std::to_string(i));}
-//     for(auto it : inserted_items){   std_map[it] = 0;  rbt.add(it); }
+    return duration_time(end_t - start_t).count();
+}
 
-//     /** compute deletion time */
+template<typename T>
+long insert_rbTree_rvalue(const std::vector<T>& elements){
+    RedBlackTree<T> rbt;
+    auto start_t = std::chrono::high_resolution_clock::now();
+    for(auto it : elements){  rbt.add(move(it));}
+    auto end_t = std::chrono::high_resolution_clock::now();
 
-//     // deletion time taken by rbt
-//     auto insert_time_rbt = std::chrono::high_resolution_clock::now();
-//     for(auto it : inserted_items){   rbt.remove(it); }
-//     auto finish_insert_time_rbt = std::chrono::high_resolution_clock::now();
+    return duration_time(end_t - start_t).count();
+}
 
-//     // deletion time taken by stl map
-//     auto insert_time_map = std::chrono::high_resolution_clock::now();
-//     for(auto it : inserted_items){   std_map.erase(it); }
-//     auto finish_insert_time_map = std::chrono::high_resolution_clock::now();
+template <typename T >
+long Benchmark::delete_stl_map_lvalue(const std::vector<T>& elements){
+    map<T, int> stl_map;
+    auto start_t = std::chrono::high_resolution_clock::now();
+    for(auto it : elements){  stl_map.erase(it);}
+    auto end_t = std::chrono::high_resolution_clock::now();
 
-//     std::cout << "\n          #####################################\n";
-//     std::cout << "          Deletion Benchmark For Sorted Strings of Numbers\n";
-//     std::cout << "          #####################################\n";
-//     auto map_duration = std::chrono::duration_cast<std::chrono::milliseconds>
-//             (finish_insert_time_map - insert_time_map).count();
-//     std::cout<<"STL_MAP  =  " << map_duration << std::endl;
+    return duration_time(end_t - start_t).count();
+}
 
-//     auto rbt_duration = std::chrono::duration_cast<std::chrono::milliseconds>
-//             (finish_insert_time_rbt - insert_time_rbt).count();
-//     std::cout << "RB_Tree =  " << rbt_duration << std::endl;
+template<typename T>
+long Benchmark::delete_rbTree_lvalue(const std::vector<T>& elements){
+    RedBlackTree<T> rbt;
+    auto start_t = std::chrono::high_resolution_clock::now();
+    for(auto it : elements){  rbt.remove(it);}
+    auto end_t = std::chrono::high_resolution_clock::now();
 
-//}
+    return duration_time(end_t - start_t).count();
+}
 
-//long Benchmark::rvalue_sorted_strings(){
-//    RedBlackTree<std::string> rbt;
-//    std::map<std::string,int> std_map;
 
-//    // insert items
-//    for(int i=0;i<items;i++){std_map[std::to_string(i)]=0; rbt.add(std::to_string(i));};
+template<typename T>
+long delete_stl_map_rvalue(const std::vector<T>& elements){
+    map<T, int> stl_map;
+    auto start_t = std::chrono::high_resolution_clock::now();
+    for(auto it : elements){  stl_map.erase(move(it));}
+    auto end_t = std::chrono::high_resolution_clock::now();
 
-//    // delete items time
+    return duration_time(end_t - start_t).count();
+}
 
-//}
+template<typename T>
+long delete_rbTree_rvalue(const std::vector<T>& elements){
+    RedBlackTree<T> rbt;
+    auto start_t = std::chrono::high_resolution_clock::now();
+    for(auto it : elements){  rbt.remove(move(it));}
+    auto end_t = std::chrono::high_resolution_clock::now();
+
+    return duration_time(end_t - start_t).count();
+}
+
 
 
 #endif // BENCHMARK_H
