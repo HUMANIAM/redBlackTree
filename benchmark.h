@@ -3,7 +3,7 @@
 #include <chrono>
 #include <time.h>
 #include <string>
-#include <map>
+#include <set>
 using namespace std;
 #define PRINT_DASHES 61
 // project headers
@@ -27,28 +27,28 @@ public:
 
     // insertion of lvalues
     template<typename T>
-    long insert_stl_map_lvalue(const std::vector<T>&);
+    long insert_stl_set_lvalue(const std::vector<T>&);
 
     template<typename T>
     long insert_rbTree_lvalue(const std::vector<T>&);
 
     // insert rvalues
     template<typename T>
-    long insert_stl_map_rvalue(const std::vector<T>&);
+    long insert_stl_set_rvalue(const std::vector<T>&);
 
     template<typename T>
     long insert_rbTree_rvalue(const std::vector<T>&);
 
     // deletion of rvalues
     template<typename T>
-    long delete_stl_map_lvalue(const std::vector<T>&);
+    long delete_stl_set_lvalue(const std::vector<T>&);
 
     template<typename T>
     long delete_rbTree_lvalue(const std::vector<T>&);
 
     // insert rvalues
     template<typename T>
-    long delete_stl_map_rvalue(const std::vector<T>&);
+    long delete_stl_set_rvalue(const std::vector<T>&);
 
     template<typename T>
     long delete_rbTree_rvalue(const std::vector<T>&);
@@ -57,9 +57,9 @@ public:
 template<typename T>
 vector<long> Benchmark::test_all_lvalue_objects(const vector<T>& elements){
    vector<long> results;
-   results.push_back(insert_stl_map_lvalue(elements));
+   results.push_back(insert_stl_set_lvalue(elements));
    results.push_back(insert_rbTree_lvalue(elements));
-   results.push_back(delete_stl_map_lvalue(elements));
+   results.push_back(delete_stl_set_lvalue(elements));
    results.push_back(delete_rbTree_lvalue(elements));
    return results;
 }
@@ -67,18 +67,18 @@ vector<long> Benchmark::test_all_lvalue_objects(const vector<T>& elements){
 template<typename T>
 vector<long> Benchmark::test_all_rvalue_objects(const vector<T>& elements){
    vector<long> results;
-   results.push_back(insert_stl_map_rvalue(elements));
+   results.push_back(insert_stl_set_rvalue(elements));
    results.push_back(insert_rbTree_rvalue(elements));
-   results.push_back(delete_stl_map_rvalue(elements));
+   results.push_back(delete_stl_set_rvalue(elements));
    results.push_back(delete_rbTree_rvalue(elements));
    return results;
 }
 
 template <typename T >
-long Benchmark::insert_stl_map_lvalue(const std::vector<T>& elements){
-     map<T, int> stl_map;
+long Benchmark::insert_stl_set_lvalue(const std::vector<T>& elements){
+     set<T> stl_set;
     auto start_t = std::chrono::high_resolution_clock::now();
-    for(auto it : elements){  stl_map[it] = 0;}
+    for(auto it : elements){  stl_set.insert(it);}
     auto end_t = std::chrono::high_resolution_clock::now();
 
     return duration_time(end_t - start_t).count();
@@ -96,10 +96,10 @@ long Benchmark::insert_rbTree_lvalue(const std::vector<T>& elements){
 
 
 template<typename T>
-long Benchmark::Benchmark::insert_stl_map_rvalue(const std::vector<T>& elements){
-    map<T, int> stl_map;
+long Benchmark::Benchmark::insert_stl_set_rvalue(const std::vector<T>& elements){
+    set<T> stl_set;
     auto start_t = std::chrono::high_resolution_clock::now();
-    for(auto it : elements){  stl_map[move(it)] = 0;}
+    for(auto it : elements){  stl_set.insert(move(it));}
     auto end_t = std::chrono::high_resolution_clock::now();
 
     return duration_time(end_t - start_t).count();
@@ -116,10 +116,10 @@ long Benchmark::insert_rbTree_rvalue(const std::vector<T>& elements){
 }
 
 template <typename T >
-long Benchmark::delete_stl_map_lvalue(const std::vector<T>& elements){
-    map<T, int> stl_map;
+long Benchmark::delete_stl_set_lvalue(const std::vector<T>& elements){
+    set<T> stl_set;
     auto start_t = std::chrono::high_resolution_clock::now();
-    for(auto it : elements){  stl_map.erase(it);}
+    for(auto it : elements){  stl_set.erase(it);}
     auto end_t = std::chrono::high_resolution_clock::now();
 
     return duration_time(end_t - start_t).count();
@@ -137,10 +137,10 @@ long Benchmark::delete_rbTree_lvalue(const std::vector<T>& elements){
 
 
 template<typename T>
-long Benchmark::delete_stl_map_rvalue(const std::vector<T>& elements){
-    map<T, int> stl_map;
+long Benchmark::delete_stl_set_rvalue(const std::vector<T>& elements){
+    set<T> stl_set;
     auto start_t = std::chrono::high_resolution_clock::now();
-    for(auto it : elements){  stl_map.erase(move(it));}
+    for(auto it : elements){  stl_set.erase(move(it));}
     auto end_t = std::chrono::high_resolution_clock::now();
 
     return duration_time(end_t - start_t).count();
@@ -203,7 +203,7 @@ void print_results(int test_size,vector<long> v)
                cout<<"-";
             cout<<endl;
 }
-///  ####### Benchmark for insertion and deletion of our RB tree agains STL Map (implemented using RB Tree also)
+///  ####### Benchmark for insertion and deletion of our RB tree agains STL set (implemented using RB Tree also)
 vector<int> get_sorted_integers(int sz){
     vector<int> elements;
     for(int i=0; i < sz; i++) { elements.push_back(i);}

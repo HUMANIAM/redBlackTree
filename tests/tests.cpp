@@ -1,5 +1,5 @@
 #define CATCH_CONFIG_RUNNER
-#define TEST true
+#define TEST false
 #include <catch.hpp>
 #include <chrono>
 #include <time.h>
@@ -22,8 +22,8 @@ int main()
         return Catch::Session().run();
     }
 
-    // run benchmark after passing
-    //run_benchmark();
+     //run benchmark after passing
+    run_benchmark();
     //start working on other parts of your project here.
     return 0;
 }
