@@ -155,7 +155,8 @@ bool RedBlackTree<T>::search(T& element)
 
 // search for element in rbTree and if found return pointer to it else return null pointer
 template<typename T>
-Node<T>* RedBlackTree<T>::search_util(T&& element, Node<T>* current){
+Node<T>* RedBlackTree<T>::search_util(T&& element, Node<T>* current)
+{
     if(current==nullptr)
     {
         return nullptr;
@@ -386,7 +387,8 @@ void RedBlackTree<T>::remove_util(Node<T>* node_d)
         delete_leave(node_d, temp_x, node_x_null);
         if(root_n){ return; }
 
-    }else{
+    }else
+    {
         bool temp_has_children = true;
         if(node_d->left == nullptr)
         {
@@ -457,7 +459,8 @@ void RedBlackTree<T>::rb_remove_fixup(Node<T>* node_x, bool delete_x)
     while(node_x != root && node_x->color == BLACK)
     {
 
-        if(node_x == node_x->parent->left){
+        if(node_x == node_x->parent->left)
+        {
             rb_remove_fixup_left(node_x);
         }else
         {
@@ -649,10 +652,12 @@ bool RedBlackTree<T>::haschild(Node<T>* node)
 template <typename T>
 void RedBlackTree<T>::delete_dummy(Node<T>* node)
 {
-    if(node == node->parent->left) {
+    if(node == node->parent->left)
+    {
         node->parent->left = nullptr;
 
-    }else{
+    }else
+    {
         node->parent->right = nullptr;
     }
 
@@ -755,17 +760,20 @@ void RedBlackTree<T>::clean_tree(Node<T>*node)
 
 // test functions
 template <class T>
-bool RedBlackTree<T>::root_black(){
+bool RedBlackTree<T>::root_black()
+{
     return (root == nullptr) || (root->color == BLACK);
 }
 
 template <class T>
-bool RedBlackTree<T>::two_adjacent_red(){
+bool RedBlackTree<T>::two_adjacent_red()
+{
     return two_adjacent_red(root);
 }
 
 template <class T>
-bool RedBlackTree<T>::height_black(){
+bool RedBlackTree<T>::height_black()
+{
     return height_black(root).second;
 }
 
