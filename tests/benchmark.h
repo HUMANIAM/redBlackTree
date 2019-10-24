@@ -8,16 +8,6 @@ using namespace std;
 #define PRINT_DASHES 61
 // project headers
 #include "../redblack.h"
-void get_spaces(int num,int& limit)
-{
-    while(num>=10)
-    {
-        num/=10;
-        limit--;
-
-    }
-
-}
 void print_headers()
 {
     for(int i=0;i<PRINT_DASHES;i++)
@@ -65,25 +55,26 @@ auto duration_time(Duration const& duration) {
     return std::chrono::duration_cast<std::chrono::milliseconds>(duration);
 }
 
-struct Reslult{
-    long stl_map_insert;
-    long stl_map_delete;
-    long rbTree_insert;
-    long rbTree_delete;
-};
 
-class Test{
+class Benchmark{
     int items;
+
 public:
-    Test (int items):items(items){}
+    Benchmark (int items):items(items){}
+
+    // insert lvalues
+    template<typename T>
+    long insert_stl_map(const std::vector<T>&, map<T, int>&);
+
+    template<typename T>
+    long insert_rbTree(const std::vector<T>&, RedBlackTree<T>&);
+
+    template<typename T>
+    vector<long> test_all_lvalue_objects(const vector<T>&);
 
     // test for lvalue objects that has expensive cost of copy like strings, containers, larger user-defined objs
     long lvalue_sorted_strings();
     long lvalue_ranodem_strings();
-
-    // test for rvalue objects that has expensive cost of copy like strings, containers, larger user-defined objs
-    long rvalue_sorted_strings();
-    long rvalue_ranodem_strings();
 
     // test for integer numbers
     long sorted_integers();
@@ -96,8 +87,13 @@ public:
     long insert_rbTree(const std::vector<T>&, RedBlackTree<T>);
 };
 
+template<typename T>
+vector<long> Benchmark::test_all_lvalue_objects(const vector<T>& elements){
+   // auto stl_map_insert_time =
+}
+
 template <typename T >
-long Test::insert_stl_map(const std::vector<T>& elements, map<T, int> stl_map){
+long Benchmark::insert_stl_map(const std::vector<T>& elements, map<T, int>& stl_map){
     auto start_t = std::chrono::high_resolution_clock::now();
     for(auto it : elements){  stl_map[it] = 0;}
     auto end_t = std::chrono::high_resolution_clock::now();
@@ -106,7 +102,7 @@ long Test::insert_stl_map(const std::vector<T>& elements, map<T, int> stl_map){
 }
 
 template<typename T>
-long Test::insert_rbTree(const std::vector<T>& elements, RedBlackTree<T> rbt){
+long Benchmark::insert_rbTree(const std::vector<T>& elements, RedBlackTree<T>& rbt){
     auto start_t = std::chrono::high_resolution_clock::now();
     for(auto it : elements){  rbt.add(it);}
     auto end_t = std::chrono::high_resolution_clock::now();
@@ -115,7 +111,7 @@ long Test::insert_rbTree(const std::vector<T>& elements, RedBlackTree<T> rbt){
 }
 
 
-//long Test::lvalue_sorted_strings(){
+//long Benchmark::lvalue_sorted_strings(){
 //     RedBlackTree<std::string> rbt;
 //     std::map<std::string,int> std_map;
 //     std::vector<std::string> inserted_items;
@@ -149,7 +145,7 @@ long Test::insert_rbTree(const std::vector<T>& elements, RedBlackTree<T> rbt){
 
 //}
 
-//long Test::rvalue_sorted_strings(){
+//long Benchmark::rvalue_sorted_strings(){
 //    RedBlackTree<std::string> rbt;
 //    std::map<std::string,int> std_map;
 
