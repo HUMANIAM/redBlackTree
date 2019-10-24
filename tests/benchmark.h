@@ -23,10 +23,10 @@ class Benchmark{
 
     // insert lvalues
     template<typename T>
-    long insert_stl_map(const std::vector<T>&, map<T, int>);
+    long insert_stl_map(const std::vector<T>&, map<T, int>&);
 
     template<typename T>
-    long insert_rbTree(const std::vector<T>&, RedBlackTree<T>);
+    long insert_rbTree(const std::vector<T>&, RedBlackTree<T>&);
 
     template<typename T>
     vector<long> test_all_lvalue_objects(const vector<T>&);
@@ -51,7 +51,7 @@ vector<long> Benchmark::test_all_lvalue_objects(const vector<T>& elements){
 }
 
 template <typename T >
-long Benchmark::insert_stl_map(const std::vector<T>& elements, map<T, int> stl_map){
+long Benchmark::insert_stl_map(const std::vector<T>& elements, map<T, int>& stl_map){
     auto start_t = std::chrono::high_resolution_clock::now();
     for(auto it : elements){  stl_map[it] = 0;}
     auto end_t = std::chrono::high_resolution_clock::now();
@@ -60,7 +60,7 @@ long Benchmark::insert_stl_map(const std::vector<T>& elements, map<T, int> stl_m
 }
 
 template<typename T>
-long Benchmark::insert_rbTree(const std::vector<T>& elements, RedBlackTree<T> rbt){
+long Benchmark::insert_rbTree(const std::vector<T>& elements, RedBlackTree<T>& rbt){
     auto start_t = std::chrono::high_resolution_clock::now();
     for(auto it : elements){  rbt.add(it);}
     auto end_t = std::chrono::high_resolution_clock::now();
