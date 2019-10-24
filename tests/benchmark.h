@@ -79,12 +79,6 @@ public:
     // test for integer numbers
     long sorted_integers();
     long random_integers();
-    // insert lvalues
-    template<typename T>
-    long insert_stl_map(const std::vector<T>&, map<T, int>);
-
-    template<typename T>
-    long insert_rbTree(const std::vector<T>&, RedBlackTree<T>);
 };
 
 template<typename T>
