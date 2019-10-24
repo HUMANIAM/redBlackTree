@@ -14,7 +14,6 @@ auto duration_time(Duration const& duration) {
     return std::chrono::duration_cast<std::chrono::milliseconds>(duration);
 }
 
-const int items = 100000000;
 
 class Test{
     int items;
