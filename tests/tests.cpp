@@ -1,5 +1,5 @@
 #define CATCH_CONFIG_RUNNER
-#define TEST false
+#define TEST true
 #include <catch.hpp>
 #include <chrono>
 #include <time.h>
@@ -23,7 +23,7 @@ int main()
     }
 
     // run benchmark after passing
-    run_benchmark();
+    //run_benchmark();
     //start working on other parts of your project here.
     return 0;
 }
