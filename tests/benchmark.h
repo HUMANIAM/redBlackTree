@@ -65,12 +65,17 @@ auto duration_time(Duration const& duration) {
     return std::chrono::duration_cast<std::chrono::milliseconds>(duration);
 }
 
-const int items = 100000000;
+struct Reslult{
+    long stl_map_insert;
+    long stl_map_delete;
+    long rbTree_insert;
+    long rbTree_delete;
+};
 
 class Test{
     int items;
 
-
+    // insert lvalues
     template<typename T>
     long insert_stl_map(const std::vector<T>&, map<T, int>);
 
@@ -79,6 +84,7 @@ class Test{
 
 public:
     Test (int items):items(items){}
+
 
     // test for lvalue objects that has expensive cost of copy like strings, containers, larger user-defined objs
     long lvalue_sorted_strings();
@@ -104,7 +110,7 @@ long Test::insert_stl_map(const std::vector<T>& elements, map<T, int> stl_map){
 }
 
 template<typename T>
-long insert_rbTree(const std::vector<T>& elements, RedBlackTree<T> rbt){
+long Test::insert_rbTree(const std::vector<T>& elements, RedBlackTree<T> rbt){
     auto start_t = std::chrono::high_resolution_clock::now();
     for(auto it : elements){  rbt.add(it);}
     auto end_t = std::chrono::high_resolution_clock::now();
