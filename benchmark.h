@@ -166,7 +166,7 @@ void print_headers(const string& type)
 {
     cout << "  Comparison with " << type << endl;
         for(int i=0;i<PRINT_DASHES;i++)
-            cout<<"#";
+            cout<<"*";
         cout<<endl;
         cout<<"Items   |";
         cout<<" stl_insert |";
