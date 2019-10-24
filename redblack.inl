@@ -156,7 +156,8 @@ bool RedBlackTree<T>::search(T& element)
 // search for element in rbTree and if found return pointer to it else return null pointer
 template<typename T>
 Node<T>* RedBlackTree<T>::search_util(T&& element, Node<T>* current){
-    if(current==nullptr){
+    if(current==nullptr)
+    {
         return nullptr;
     }
 
@@ -168,7 +169,8 @@ Node<T>* RedBlackTree<T>::search_util(T&& element, Node<T>* current){
     {
         return search_util(std::move(element),current->left);
 
-    }else{
+    }else
+    {
         return search_util(std::move(element),current->right);
     }
 
@@ -339,11 +341,13 @@ void RedBlackTree<T>::print(Node<T>*current)
 /////////////////////////////////////////////// Remove Node From RBTree  ///////////////////
 
 template <typename T>
-void RedBlackTree<T>::remove(T&& element){
+void RedBlackTree<T>::remove(T&& element)
+{
     Node<T>* node_addr = search_util(std::move(element), root);
 
     // the node doesn't exist in the rbTree
-    if(node_addr == nullptr){
+    if(node_addr == nullptr)
+    {
         return;
     }
 
@@ -352,7 +356,8 @@ void RedBlackTree<T>::remove(T&& element){
 }
 
 template <typename T>
-void RedBlackTree<T>::remove(T& element){
+void RedBlackTree<T>::remove(T& element)
+{
     T t = element;
     remove(std::move(t));
 }
@@ -365,7 +370,8 @@ void RedBlackTree<T>::remove(const Container<T,Args...>& container)
 }
 
 template<typename T>
-void RedBlackTree<T>::remove_util(Node<T>* node_d){
+void RedBlackTree<T>::remove_util(Node<T>* node_d)
+{
     // temp will replace the node_d and temp_x will replace temp node
     Node<T>* temp = node_d;
     Node<T>* temp_x = nullptr;
@@ -374,7 +380,8 @@ void RedBlackTree<T>::remove_util(Node<T>* node_d){
     Color temp_color = temp->color;
     bool node_x_null = false;
 
-    if(!haschild(node_d)){
+    if(!haschild(node_d))
+    {
         bool root_n = root == node_d;
         delete_leave(node_d, temp_x, node_x_null);
         if(root_n){ return; }
@@ -400,16 +407,19 @@ void RedBlackTree<T>::remove_util(Node<T>* node_d){
             temp_has_children = haschild(temp);
 
             // if temp is the smallest node in the right subtree of node_d and also child to it.
-            if(!temp_has_children && temp_color == BLACK){
+            if(!temp_has_children && temp_color == BLACK)
+            {
                 node_d->element = temp->element;
                 temp_x = temp;
                 temp_x->color = BLACK;
                 node_x_null = true;
 
-            }else if(temp_x != nullptr && temp->parent == node_d){
+            }else if(temp_x != nullptr && temp->parent == node_d)
+            {
                 temp_x->parent = temp;
 
-            }else{
+            }else
+            {
                 rb_transplant(temp, temp_x);
 
                 // make the right of node_d also right to node temp
@@ -419,7 +429,8 @@ void RedBlackTree<T>::remove_util(Node<T>* node_d){
                 }
 
             }
-            if(temp_has_children || temp_color == RED){
+            if(temp_has_children || temp_color == RED)
+            {
                 rb_transplant(node_d, temp);
                 temp->left = node_d->left;
                 temp->left->parent = temp;
@@ -432,16 +443,19 @@ void RedBlackTree<T>::remove_util(Node<T>* node_d){
     }
 
     // check properties of rbTree aren't broken
-    if(temp_color == BLACK){
+    if(temp_color == BLACK)
+    {
         rb_remove_fixup(temp_x, node_x_null);
     }
 }
 
 ///////////////////// Fix RBTree properties after deletion /////////////////
 template <typename T>
-void RedBlackTree<T>::rb_remove_fixup(Node<T>* node_x, bool delete_x){
+void RedBlackTree<T>::rb_remove_fixup(Node<T>* node_x, bool delete_x)
+{
     Node<T>* node_x_t = node_x;
-    while(node_x != root && node_x->color == BLACK){
+    while(node_x != root && node_x->color == BLACK)
+    {
 
         if(node_x == node_x->parent->left){
             rb_remove_fixup_left(node_x);
@@ -461,7 +475,8 @@ void RedBlackTree<T>::rb_remove_fixup(Node<T>* node_x, bool delete_x){
 
 /////////// Fix the height black of node located in the left hand side of the parent ///
 template <class T>
-Node<T>* RedBlackTree<T>::remove_fixup_left_case1(Node<T>* sibling_w, Node<T>* node_x){
+Node<T>* RedBlackTree<T>::remove_fixup_left_case1(Node<T>* sibling_w, Node<T>* node_x)
+{
     sibling_w->color = BLACK;
     node_x->parent->color = RED;
     rotate_left(node_x->parent);
@@ -470,15 +485,18 @@ Node<T>* RedBlackTree<T>::remove_fixup_left_case1(Node<T>* sibling_w, Node<T>* n
 
 
 template <class T>
-Node<T>* RedBlackTree<T>::remove_fixup_left_case2(Node<T>* sibling_w, Node<T>* node_x){
+Node<T>* RedBlackTree<T>::remove_fixup_left_case2(Node<T>* sibling_w, Node<T>* node_x)
+{
     sibling_w->color = RED;
     return  node_x->parent;
 }
 
 
 template <class T>
-Node<T>* RedBlackTree<T>::remove_fixup_left_case3(Node<T>* sibling_w, Node<T>* node_x){
-    if(sibling_w->left != nullptr){
+Node<T>* RedBlackTree<T>::remove_fixup_left_case3(Node<T>* sibling_w, Node<T>* node_x)
+{
+    if(sibling_w->left != nullptr)
+    {
         sibling_w->left->color = BLACK;
     }
 
@@ -490,11 +508,13 @@ Node<T>* RedBlackTree<T>::remove_fixup_left_case3(Node<T>* sibling_w, Node<T>* n
 
 
 template <class T>
-Node<T>* RedBlackTree<T>::remove_fixup_left_case4(Node<T>* sibling_w, Node<T>* node_x){
+Node<T>* RedBlackTree<T>::remove_fixup_left_case4(Node<T>* sibling_w, Node<T>* node_x)
+{
     sibling_w->color = node_x->parent->color;
 
     node_x->parent->color = BLACK;
-    if(sibling_w->right != nullptr){
+    if(sibling_w->right != nullptr)
+    {
         sibling_w->right->color = BLACK;
     }
 
@@ -510,7 +530,8 @@ void RedBlackTree<T>::rb_remove_fixup_left(Node<T>*& node_x){
     // sibiling of node_x is always exist where node_x is doubly black
     Node<T>* sibling_w = node_x->parent->right;
 
-    if(sibling_w->color == RED){
+    if(sibling_w->color == RED)
+    {
         // case 1
         sibling_w = remove_fixup_left_case1(sibling_w, node_x);
     }
@@ -518,15 +539,18 @@ void RedBlackTree<T>::rb_remove_fixup_left(Node<T>*& node_x){
     // children of w_sibling has black color
     bool w_left_black  = (sibling_w->left  == nullptr) || (sibling_w->left->color == BLACK);
     bool w_right_black = (sibling_w->right == nullptr) || (sibling_w->right->color == BLACK);
-    if(w_left_black && w_right_black){
+    if(w_left_black && w_right_black)
+    {
         // case 2
         node_x = remove_fixup_left_case2(sibling_w, node_x);
 
-    }else if(w_right_black){
+    }else if(w_right_black)
+    {
         // case 3
         sibling_w = remove_fixup_left_case3(sibling_w, node_x);
 
-    }else{
+    }else
+    {
         // case 4
         node_x = remove_fixup_left_case4(sibling_w, node_x);
     }
@@ -534,7 +558,8 @@ void RedBlackTree<T>::rb_remove_fixup_left(Node<T>*& node_x){
 
 /////////// Fix the height black of node located in the right hand side of the parent ///
 template <class T>
-Node<T>* RedBlackTree<T>::remove_fixup_right_case1(Node<T>* sibling_w, Node<T>* node_x){
+Node<T>* RedBlackTree<T>::remove_fixup_right_case1(Node<T>* sibling_w, Node<T>* node_x)
+{
     sibling_w->color = BLACK;
     node_x->parent->color = RED;
     rotate_right(node_x->parent);
@@ -543,15 +568,18 @@ Node<T>* RedBlackTree<T>::remove_fixup_right_case1(Node<T>* sibling_w, Node<T>* 
 
 
 template <class T>
-Node<T>* RedBlackTree<T>::remove_fixup_right_case2(Node<T>* sibling_w, Node<T>* node_x){
+Node<T>* RedBlackTree<T>::remove_fixup_right_case2(Node<T>* sibling_w, Node<T>* node_x)
+{
     sibling_w->color = RED;
     return  node_x->parent;
 }
 
 
 template <class T>
-Node<T>* RedBlackTree<T>::remove_fixup_right_case3(Node<T>* sibling_w, Node<T>* node_x){
-    if(sibling_w->right != nullptr){
+Node<T>* RedBlackTree<T>::remove_fixup_right_case3(Node<T>* sibling_w, Node<T>* node_x)
+{
+    if(sibling_w->right != nullptr)
+    {
         sibling_w->right->color = BLACK;
     }
 
@@ -567,7 +595,8 @@ Node<T>* RedBlackTree<T>::remove_fixup_right_case4(Node<T>* sibling_w, Node<T>* 
     sibling_w->color = node_x->parent->color;
 
     node_x->parent->color = BLACK;
-    if(sibling_w->left != nullptr){
+    if(sibling_w->left != nullptr)
+    {
         sibling_w->left->color = BLACK;
     }
 
@@ -583,7 +612,8 @@ void RedBlackTree<T>::rb_remove_fixup_right(Node<T>*& node_x){
     // sibiling of node_x is always exist where node_x is doubly black
     Node<T>* sibling_w = node_x->parent->left;
 
-    if(sibling_w->color == RED){
+    if(sibling_w->color == RED)
+    {
         // case 1
         sibling_w = remove_fixup_right_case1(sibling_w, node_x);
     }
@@ -591,15 +621,18 @@ void RedBlackTree<T>::rb_remove_fixup_right(Node<T>*& node_x){
     // children of w_sibling has black color
     bool w_left_black  = (sibling_w->left  == nullptr) || (sibling_w->left->color == BLACK);
     bool w_right_black = (sibling_w->right == nullptr) || (sibling_w->right->color == BLACK);
-    if(w_left_black && w_right_black){
+    if(w_left_black && w_right_black)
+    {
         // case 2
         node_x = remove_fixup_right_case2(sibling_w, node_x);
 
-    }else if(w_left_black){
+    }else if(w_left_black)
+    {
         // case 3
         sibling_w = remove_fixup_right_case3(sibling_w, node_x);
 
-    }else{
+    }else
+    {
         // case 4
         node_x = remove_fixup_right_case4(sibling_w, node_x);
     }
@@ -608,12 +641,14 @@ void RedBlackTree<T>::rb_remove_fixup_right(Node<T>*& node_x){
 
 /////////////////////// Utility Functions  //////////////////////////////////////////
 template <typename T>
-bool RedBlackTree<T>::haschild(Node<T>* node){
+bool RedBlackTree<T>::haschild(Node<T>* node)
+{
     return (node->left != nullptr) || (node->right != nullptr);
 }
 
 template <typename T>
-void RedBlackTree<T>::delete_dummy(Node<T>* node){
+void RedBlackTree<T>::delete_dummy(Node<T>* node)
+{
     if(node == node->parent->left) {
         node->parent->left = nullptr;
 
@@ -626,7 +661,8 @@ void RedBlackTree<T>::delete_dummy(Node<T>* node){
 
 // make bridge between u parent node and v node
 template <typename T>
-void RedBlackTree<T>::rb_transplant(Node<T>* u, Node<T>* v){
+void RedBlackTree<T>::rb_transplant(Node<T>* u, Node<T>* v)
+{
     // We don't delete the node we just transplant it.
     if(u == root)
     {
@@ -651,14 +687,16 @@ Node<T>* RedBlackTree<T>::min_node(Node<T>* node){
 }
 
 template <typename T>
-void RedBlackTree<T>::delete_leave(Node<T>*& node_d, Node<T>*& temp_x, bool& node_x_null){
+void RedBlackTree<T>::delete_leave(Node<T>*& node_d, Node<T>*& temp_x, bool& node_x_null)
+{
     if(node_d == root){
         delete node_d;
         root = nullptr;
         return;
     }
 
-    // keep the node_d if it is black to used in fixing the tree height black else delete it.
+    // keep the node_d if it is black to used in fixing the tree height black
+    // else delete it.
     if(node_d->color == BLACK){
         temp_x = node_d;
         node_x_null = true;
