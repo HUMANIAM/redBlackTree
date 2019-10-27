@@ -34,9 +34,11 @@
 - C++ STL: map, multimap, multiset.
 - Linux kernel: completely fair scheduler, linux/rbtree.h
 
-### Benchmark test against STL-SET C++
-**comparing our implementation of redblack tree against the set data structure that is implemented internally using red-black tree and here are the results.**
-![benchMark test](http://arwash.rdi:5050/Misc/redblacktree/blob/master/Screenshot%20from%202019-10-24%2016-47-49.png)
+### Test Benchmark against STL-SET C++
+**comparing our implementation of redblack tree against the set data structure that is implemented internally using red-black tree and here are the results**
+
+![benchMark test](http://arwash.rdi:5050/Misc/redblacktree/raw/master/Screenshot%20from%202019-10-24%2016-47-49.png)
+
 ## Resources
 - Introduction to algorithms (CLRS book) (chapter-13 red-black tree)
 - https://www.youtube.com/watch?v=hm2GHwyKF1o
