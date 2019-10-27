@@ -159,10 +159,9 @@ long Benchmark::delete_rbTree_rvalue(const std::vector<T>& elements){
 
 const int max_items = 1e7;
 const int max_Rondom = 1e7;
-class Benchmark;
-Benchmark benchmark;
+static Benchmark benchmark;
 
-void print_headers(const string& type)
+static void print_headers(const string& type)
 {
     cout << "  Comparison with " << type << endl;
         for(int i=0;i<PRINT_DASHES;i++)
@@ -180,7 +179,7 @@ void print_headers(const string& type)
 
 }
 
-void print_results(int test_size,vector<long> v)
+static void print_results(int test_size,vector<long> v)
 {
       int limit=8;
        cout<<test_size;
@@ -204,25 +203,25 @@ void print_results(int test_size,vector<long> v)
             cout<<endl;
 }
 ///  ####### Benchmark for insertion and deletion of our RB tree agains STL set (implemented using RB Tree also)
-vector<int> get_sorted_integers(int sz){
+static vector<int> get_sorted_integers(int sz){
     vector<int> elements;
     for(int i=0; i < sz; i++) { elements.push_back(i);}
     return elements;
 }
 
-vector<int> get_unsorted_integers(int sz){
+static vector<int> get_unsorted_integers(int sz){
     vector<int> elements;
     for(int i=0; i < sz; i++) { elements.push_back(rand() % max_Rondom);}
     return elements;
 }
 
-vector<string> get_sorted_strings(int sz){
+static vector<string> get_sorted_strings(int sz){
     vector<string> elements;
     for(int i=0; i < sz; i++) { elements.push_back(to_string(i));}
     return elements;
 }
 
-vector<string> get_unsorted_strings(int sz){
+static vector<string> get_unsorted_strings(int sz){
     vector<string> elements;
     for(int i=0; i < sz; i++) { elements.push_back(to_string(rand() % max_Rondom));}
     return elements;
