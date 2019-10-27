@@ -1,5 +1,5 @@
 #                            RedBlackTree
-#### Red-Black-Tree is just a balanced search tree with every node in the tree has the data, left child, right child, and 		color.
+#### Red-Black-Tree is just a balanced search tree with every node in the tree has the data, left child, right child, and color.
 
 ## Properties 
 - The root and NIL nodes are black.
