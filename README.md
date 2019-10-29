@@ -37,7 +37,7 @@
 ### Test Benchmark against STL-SET C++
 **comparing our implementation of redblack tree against the set data structure that is implemented internally using red-black tree and here are the results**
 
-![benchMark test](http://arwash.rdi:5050/Misc/redblacktree/raw/master/Screenshot%20from%202019-10-24%2016-47-49.png)
+![benchMark test](https://github.com/HUMANIAM/redBlackTree/blob/master/Screenshot%20from%202019-10-24%2016-47-49.png)
 
 ## Resources
 - Introduction to algorithms (CLRS book) (chapter-13 red-black tree)
